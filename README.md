@@ -247,3 +247,5 @@ The pipeline is intentionally decoupled using `BaseDetector` (`src/detector_base
      ```
    - In `src/pipeline.py` or `main.py`, pass `OilSpillPipeline(detector=UNetDetector())`.
    - The entire geospatial affine projection, polygon extraction, UTM metric area calculation, GeoJSON generation, FastAPI endpoints, and Leaflet map will automatically run with the deep learning model.
+#   s e f o r e  
+ 
