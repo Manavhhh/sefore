@@ -1,4 +1,4 @@
-# AegisSAR: Sentinel-1 Satellite-based Oil Spill Detection Module
+# Sefore: Sentinel-1 Satellite-based Oil Spill Detection Module
 **Smart India Hackathon 2026 (SIH) | Problem Statement ID: SIH26143**
 
 > **Official Module Scope & Disclaimer:**

@@ -17,8 +17,8 @@ from src.pipeline import OilSpillPipeline
 from src.detector import ClassicalDetector
 
 app = FastAPI(
-    title="SIH26143: Satellite-based Oil Spill Detection API",
-    description="Automated Sentinel-1 SAR Oil Spill Detection and Geospatial Geolocation Module",
+    title="Sefore: Satellite-based Oil Spill Detection API",
+    description="Automated Sentinel-1 SAR Oil Spill Detection and Geospatial Geolocation Module (SIH26143)",
     version="1.0.0",
 )
 

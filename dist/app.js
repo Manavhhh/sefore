@@ -1,6 +1,6 @@
 /**
- * AegisSAR: Oil Spill Detection Frontend Controller
- * PS ID: SIH26143
+ * Sefore: Satellite Oil Spill Detection & Geolocation
+ * Smart India Hackathon 2026 - PS ID: SIH26143
  */
 
 document.addEventListener("DOMContentLoaded", () => {
