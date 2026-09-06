@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIH26143: Satellite-based Oil Spill Detection System</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="navbar">
+      <div class="brand">
+        <div class="radar-pulse"></div>
+        <div>
+          <h1>AegisSAR <span class="badge">SIH 2026</span></h1>
+          <p class="subtitle">PS ID: SIH26143 &bull; Satellite-based Oil Spill Detection & Geolocation</p>
+        </div>
+      </div>
+      <div class="status-pill" id="system-status">
+        <span class="status-dot"></span> System Online
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <main class="dashboard-grid">
+      <!-- Left Sidebar: Controls & Metrics -->
+      <aside class="sidebar">
+        <!-- Ingestion Panel -->
+        <section class="card glass-card">
+          <h2>1. Satellite Data Ingestion</h2>
+          <div class="upload-zone" id="drop-zone">
+            <input type="file" id="file-input" accept=".tif,.tiff" class="file-input">
+            <div class="upload-prompt">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <p>Drag & Drop <strong>Sentinel-1 SAR GeoTIFF</strong></p>
+              <span class="hint">or click to browse local filesystem</span>
+            </div>
+          </div>
+
+          <div class="divider"><span>OR QUICK SELECT SAMPLE</span></div>
+
+          <div class="sample-picker">
+            <label for="sample-select">Zenodo Test Samples:</label>
+            <div class="select-wrapper">
+              <select id="sample-select">
+                <option value="">Loading available samples...</option>
+              </select>
+              <button id="btn-run-sample" class="btn btn-secondary">Analyze</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Detection Summary Panel -->
+        <section class="card glass-card">
+          <h2>2. Detection Intelligence</h2>
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <span class="metric-label">Spill Regions</span>
+              <span class="metric-value" id="metric-regions">--</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Heuristic Conf.</span>
+              <span class="metric-value text-accent" id="metric-confidence">--</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Estimated Area</span>
+              <span class="metric-value" id="metric-area">--</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Coordinates (WGS84)</span>
+              <span class="metric-value text-small" id="metric-coords">--</span>
+            </div>
+          </div>
+
+          <div class="export-actions">
+            <button id="btn-download-geojson" class="btn btn-primary" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Download GeoJSON
+            </button>
+          </div>
+
+          <div class="disclaimer-box">
+            <p><strong>Notice:</strong> This module detects and geolocates suspected oil-spill regions from Sentinel-1 SAR imagery. Vessel responsibility is NOT determined by this module. Spill locations will later feed into AIS correlation & drift models.</p>
+          </div>
+        </section>
+      </aside>
+
+      <!-- Center & Right: Interactive Map & Imagery Views -->
+      <section class="main-stage">
+        <!-- Interactive Leaflet Map -->
+        <div class="map-card glass-card">
+          <div class="card-header">
+            <h3>Geospatial Map & Spill Polygon Layer (EPSG:4326)</h3>
+            <div class="map-controls">
+              <button id="btn-reset-zoom" class="btn btn-small">Fit Polygon</button>
+            </div>
+          </div>
+          <div id="leaflet-map"></div>
+        </div>
+
+        <!-- Imagery Inspection Carousel / Gallery -->
+        <div class="inspection-card glass-card">
+          <div class="tab-header">
+            <button class="tab-btn active" data-target="panel-overlay">Spill Detection Overlay</button>
+            <button class="tab-btn" data-target="panel-mask">Binary Segmentation Mask</button>
+            <button class="tab-btn" data-target="panel-sar">Calibrated SAR (dB)</button>
+          </div>
+          <div class="tab-content">
+            <div class="tab-panel active" id="panel-overlay">
+              <img id="img-overlay" src="" alt="Run detection to generate overlay">
+              <div class="placeholder-text">Awaiting SAR analysis...</div>
+            </div>
+            <div class="tab-panel" id="panel-mask">
+              <img id="img-mask" src="" alt="Run detection to generate mask">
+              <div class="placeholder-text">Awaiting SAR analysis...</div>
+            </div>
+            <div class="tab-panel" id="panel-sar">
+              <img id="img-sar" src="" alt="Run detection to generate preprocessed view">
+              <div class="placeholder-text">Awaiting SAR analysis...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Application JS -->
+  <script src="app.js"></script>
+</body>
+</html>

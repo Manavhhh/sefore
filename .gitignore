@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment & local files
+.env
+venv/
+env/
+.venv/
+*.log
+
+# Large satellite archive files
+data/*.7z
+output/eval_temp/
+
+# Keep data directory structure intact
+!data/images/
+!data/masks/
