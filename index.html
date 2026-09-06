@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIH26143: Satellite-based Oil Spill Detection System</title>
+  <title>Sefore: Satellite Oil Spill Detection & Vessel Identification (SIH26143)</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <!-- Custom CSS -->
@@ -20,51 +20,66 @@
       <div class="brand">
         <div class="radar-pulse"></div>
         <div>
-          <h1>Sefore <span class="badge">SIH 2026</span></h1>
-          <p class="subtitle">PS ID: SIH26143 &bull; Satellite-based Oil Spill Detection & Geolocation</p>
+          <h1>Sefore <span class="badge">SIH 2026</span><span class="badge badge-vessel">AIS ATTRIBUTION ACTIVE</span></h1>
+          <p class="subtitle">PS ID: SIH26143 &bull; Satellite SAR Oil Spill Geolocation & AIS Vessel Suspect Identification</p>
         </div>
       </div>
-      <div class="status-pill" id="system-status">
-        <span class="status-dot"></span> System Online
+      <div class="nav-actions">
+        <button id="btn-open-modal-nav" class="btn btn-secondary btn-sm" disabled>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          final_spill_data.json
+        </button>
+        <div class="status-pill" id="system-status">
+          <span class="status-dot"></span> System Online
+        </div>
       </div>
     </header>
 
     <!-- Main Grid -->
     <main class="dashboard-grid">
-      <!-- Left Sidebar: Controls & Metrics -->
+      <!-- Left Sidebar: Controls, Metrics & Vessel Attribution -->
       <aside class="sidebar">
-        <!-- Ingestion Panel -->
+        <!-- 1. Ingestion Panel -->
         <section class="card glass-card">
-          <h2>1. Satellite Data Ingestion</h2>
+          <div class="section-title">
+            <span class="step-badge">1</span>
+            <h2>Satellite Ingestion</h2>
+          </div>
           <div class="upload-zone" id="drop-zone">
             <input type="file" id="file-input" accept=".tif,.tiff" class="file-input">
             <div class="upload-prompt">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="17 8 12 3 7 8"></polyline>
                 <line x1="12" y1="3" x2="12" y2="15"></line>
               </svg>
-              <p>Drag & Drop <strong>Sentinel-1 SAR GeoTIFF</strong></p>
-              <span class="hint">or click to browse local filesystem</span>
+              <p>Drop <strong>Sentinel-1 GeoTIFF</strong></p>
+              <span class="hint">or browse local drive</span>
             </div>
           </div>
 
-          <div class="divider"><span>OR QUICK SELECT SAMPLE</span></div>
+          <div class="divider"><span>OR QUICK SELECT SCENE</span></div>
 
           <div class="sample-picker">
-            <label for="sample-select">Zenodo Test Samples:</label>
+            <label for="sample-select">Zenodo Test Scenes:</label>
             <div class="select-wrapper">
               <select id="sample-select">
-                <option value="">Loading available samples...</option>
+                <option value="">Loading available scenes...</option>
               </select>
               <button id="btn-run-sample" class="btn btn-secondary">Analyze</button>
             </div>
           </div>
         </section>
 
-        <!-- Detection Summary Panel -->
+        <!-- 2. Detection Intelligence -->
         <section class="card glass-card">
-          <h2>2. Detection Intelligence</h2>
+          <div class="section-title">
+            <span class="step-badge">2</span>
+            <h2>Spill Slick Intelligence</h2>
+          </div>
           <div class="metrics-grid">
             <div class="metric-box">
               <span class="metric-label">Spill Regions</span>
@@ -79,47 +94,140 @@
               <span class="metric-value" id="metric-area">--</span>
             </div>
             <div class="metric-box">
-              <span class="metric-label">Coordinates (WGS84)</span>
+              <span class="metric-label">Slick Centroid</span>
               <span class="metric-value text-small" id="metric-coords">--</span>
             </div>
           </div>
 
           <div class="export-actions">
-            <button id="btn-download-geojson" class="btn btn-primary" disabled>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button id="btn-download-geojson" class="btn btn-secondary btn-sm" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
               </svg>
-              Download GeoJSON
+              Spill GeoJSON
+            </button>
+            <button id="btn-download-consolidated" class="btn btn-primary btn-sm" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 8 12 12 14 14"></polyline>
+              </svg>
+              final_spill_data.json
             </button>
           </div>
+        </section>
 
-          <div class="disclaimer-box">
-            <p><strong>Notice:</strong> This module detects and geolocates suspected oil-spill regions from Sentinel-1 SAR imagery. Vessel responsibility is NOT determined by this module. Spill locations will later feed into AIS correlation & drift models.</p>
+        <!-- 3. AIS Vessel Attribution & Suspect Identification -->
+        <section class="card glass-card" id="vessel-attribution-card">
+          <div class="section-title between">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="step-badge badge-alert">3</span>
+              <h2>Vessel Identification</h2>
+            </div>
+            <span class="vessel-count-badge" id="vessel-count">0 Tracked</span>
+          </div>
+
+          <!-- Prime Suspect Banner -->
+          <div class="prime-suspect-box" id="prime-suspect-box">
+            <div class="suspect-header">
+              <span class="pulse-indicator red"></span>
+              <span class="suspect-title">PRIME SUSPECT VESSEL</span>
+              <span class="risk-pill critical" id="prime-risk-badge">ANALYZING</span>
+            </div>
+            
+            <div class="suspect-details">
+              <div class="vessel-name-row">
+                <h3 id="prime-vessel-name">Awaiting Analysis</h3>
+                <span class="flag-badge" id="prime-vessel-flag">--</span>
+              </div>
+              <div class="vessel-meta-chips">
+                <span class="meta-chip" id="prime-vessel-type">Type: --</span>
+                <span class="meta-chip" id="prime-vessel-mmsi">MMSI: --</span>
+                <span class="meta-chip" id="prime-vessel-speed">Speed: --</span>
+              </div>
+
+              <!-- Distance & Time to Spill Centroid -->
+              <div class="correlation-stats">
+                <div class="stat-item">
+                  <span class="stat-label">Distance to Spill CPA</span>
+                  <span class="stat-val highlight" id="prime-cpa-dist">-- km</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">Time Offset (&Delta;t)</span>
+                  <span class="stat-val" id="prime-time-delta">-- min</span>
+                </div>
+              </div>
+
+              <!-- Suspect Score Bar -->
+              <div class="score-container">
+                <div class="score-label-row">
+                  <span>Attribution Suspect Score</span>
+                  <strong class="text-accent" id="prime-suspect-score">0.0%</strong>
+                </div>
+                <div class="score-track">
+                  <div class="score-fill" id="prime-score-bar" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <div class="directive-box" id="prime-directive-box">
+                <p id="prime-directive-text">Run detection on any scene to correlate maritime AIS trajectories against detected spill centroids using Shapely & GeoPandas.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ranked Leaderboard of Sector Vessels -->
+          <div class="leaderboard-section">
+            <div class="leaderboard-header">
+              <h4>Surveillance Corridor Vessels</h4>
+              <span class="hint">Click to focus on track</span>
+            </div>
+            <div class="vessel-list" id="vessel-leaderboard-list">
+              <div class="empty-list-placeholder">No vessel trajectories loaded</div>
+            </div>
           </div>
         </section>
       </aside>
 
-      <!-- Center & Right: Interactive Map & Imagery Views -->
+      <!-- Center & Right: Interactive Map & Inspection Views -->
       <section class="main-stage">
         <!-- Interactive Leaflet Map -->
         <div class="map-card glass-card">
           <div class="card-header">
-            <h3>Geospatial Map & Spill Polygon Layer (EPSG:4326)</h3>
+            <div class="map-title-row">
+              <h3>Maritime Surveillance Map (EPSG:4326)</h3>
+              <span class="map-subtitle" id="map-subtitle">Displaying Sentinel-1 Oil Slicks & AIS Trajectories</span>
+            </div>
             <div class="map-controls">
-              <button id="btn-reset-zoom" class="btn btn-small">Fit Polygon</button>
+              <!-- Layer Toggles -->
+              <div class="layer-toggles">
+                <label class="toggle-pill" title="Toggle Oil Spill Polygons">
+                  <input type="checkbox" id="toggle-layer-spill" checked>
+                  <span class="toggle-indicator red"></span> Slicks
+                </label>
+                <label class="toggle-pill" title="Toggle Vessel AIS Trajectory Lines">
+                  <input type="checkbox" id="toggle-layer-vessels" checked>
+                  <span class="toggle-indicator cyan"></span> Vessel Lines
+                </label>
+                <label class="toggle-pill" title="Toggle Distance CPA Vectors to Centroid">
+                  <input type="checkbox" id="toggle-layer-cpa" checked>
+                  <span class="toggle-indicator amber"></span> CPA Vectors
+                </label>
+              </div>
+              <button id="btn-fit-spill" class="btn btn-sm btn-secondary">Fit Slick</button>
+              <button id="btn-fit-all" class="btn btn-sm btn-secondary">Fit Sector</button>
             </div>
           </div>
           <div id="leaflet-map"></div>
         </div>
 
-        <!-- Imagery Inspection Carousel / Gallery -->
+        <!-- Imagery & Consolidated JSON Inspection Carousel / Gallery -->
         <div class="inspection-card glass-card">
           <div class="tab-header">
             <button class="tab-btn active" data-target="panel-overlay">Spill Detection Overlay</button>
             <button class="tab-btn" data-target="panel-mask">Binary Segmentation Mask</button>
             <button class="tab-btn" data-target="panel-sar">Calibrated SAR (dB)</button>
+            <button class="tab-btn" data-target="panel-json">Consolidated final_spill_data.json</button>
           </div>
           <div class="tab-content">
             <div class="tab-panel active" id="panel-overlay">
@@ -134,10 +242,44 @@
               <img id="img-sar" src="" alt="Run detection to generate preprocessed view">
               <div class="placeholder-text">Awaiting SAR analysis...</div>
             </div>
+            <div class="tab-panel json-panel" id="panel-json">
+              <div class="json-actions-bar">
+                <span class="json-filename">final_spill_data.json</span>
+                <div class="json-btn-group">
+                  <button id="btn-copy-json" class="btn btn-sm btn-secondary">Copy JSON</button>
+                  <button id="btn-download-tab-json" class="btn btn-sm btn-primary">Download JSON</button>
+                </div>
+              </div>
+              <pre id="json-code-block" class="json-view"><code>// Run detection to inspect generated final_spill_data.json</code></pre>
+            </div>
           </div>
         </div>
       </section>
     </main>
+  </div>
+
+  <!-- Modal: Consolidated Analytics Viewer -->
+  <div class="modal-backdrop" id="analytics-modal">
+    <div class="modal-dialog glass-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3>Consolidated Maritime Intelligence Briefing</h3>
+          <span class="badge">final_spill_data.json</span>
+        </div>
+        <button class="modal-close-btn" id="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="briefing-box" id="modal-briefing-box">
+          <h4>Maritime Authority Attribution Directive</h4>
+          <p id="modal-enforcement-text">Loading...</p>
+        </div>
+        <pre class="json-view modal-json" id="modal-json-content"><code></code></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-modal-copy">Copy to Clipboard</button>
+        <button class="btn btn-primary" id="btn-modal-download">Download final_spill_data.json</button>
+      </div>
+    </div>
   </div>
 
   <!-- Leaflet JS -->

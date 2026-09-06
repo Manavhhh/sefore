@@ -6,7 +6,7 @@ geospatial converter, confidence scorer, and file export.
 
 import os
 import json
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 import numpy as np
 import cv2
 
@@ -17,10 +17,12 @@ from .detector import ClassicalDetector
 from .segmentation import ContourSegmenter, SpillCandidate
 from .confidence import ConfidenceScorer
 from .geospatial import GeospatialConverter
+from .vessel_identification import VesselIdentifier
 
 class OilSpillPipeline:
     """
-    End-to-end processing pipeline from raw Sentinel-1 GeoTIFF to geolocated GeoJSON.
+    End-to-end processing pipeline from raw Sentinel-1 GeoTIFF to geolocated GeoJSON,
+    vessel AIS trajectory correlation, suspect ranking, and consolidated final_spill_data.json.
     """
 
     def __init__(
@@ -29,19 +31,25 @@ class OilSpillPipeline:
         preprocessor: Optional[SARPreprocessor] = None,
         segmenter: Optional[ContourSegmenter] = None,
         confidence_scorer: Optional[ConfidenceScorer] = None,
+        vessel_identifier: Optional[VesselIdentifier] = None,
     ):
         self.detector = detector if detector is not None else ClassicalDetector()
         self.preprocessor = preprocessor if preprocessor is not None else SARPreprocessor()
         self.segmenter = segmenter if segmenter is not None else ContourSegmenter()
         self.confidence_scorer = confidence_scorer if confidence_scorer is not None else ConfidenceScorer()
+        self.vessel_identifier = vessel_identifier if vessel_identifier is not None else VesselIdentifier()
 
     def process_image(
         self,
         input_path: str,
         output_dir: str = "output",
+        vessel_data: Optional[List[Dict[str, Any]]] = None,
+        scene_timestamp: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
-        Executes the full pipeline on a Sentinel-1 GeoTIFF and writes outputs.
+        Executes the full pipeline on a Sentinel-1 GeoTIFF:
+        SAR preprocessing -> detection -> segmentation -> geospatial UTM ->
+        AIS vessel trajectory correlation -> suspect scoring -> final_spill_data.json export.
         """
         os.makedirs(output_dir, exist_ok=True)
 
@@ -103,7 +111,6 @@ class OilSpillPipeline:
         for c in candidates:
             cv2.drawContours(overlay_rgb, [c.contour], -1, (0, 235, 255), 2)  # Yellow outline
             cx, cy = int(c.centroid[0]), int(c.centroid[1])
-            # Draw candidate ID label
             cv2.putText(
                 overlay_rgb,
                 f"#{c.id}",
@@ -136,6 +143,13 @@ class OilSpillPipeline:
         )
         highest_conf = max(confidences) if confidences else 0.0
 
+        # 9. AIS Vessel Trajectory Correlation & Suspect Scoring
+        vessel_analytics = self.vessel_identifier.correlate_spill_with_vessels(
+            spill_geojson=geojson_data,
+            scene_timestamp=scene_timestamp,
+            vessel_data=vessel_data,
+        )
+
         summary = {
             "status": "success",
             "source_image": os.path.basename(input_path),
@@ -149,7 +163,17 @@ class OilSpillPipeline:
             "overlay_path": overlay_path,
             "geojson_path": geojson_path,
             "features": geojson_data["features"],
-            "note": "Suspected oil-spill regions. Vessel responsibility is NOT determined by this module.",
+            "vessel_analytics": vessel_analytics,
         }
+
+        # 10. Export Consolidated Single Analytics Document: final_spill_data.json
+        final_spill_data_path = os.path.join(output_dir, "final_spill_data.json")
+        consolidated = self.vessel_identifier.generate_consolidated_spill_data(
+            pipeline_summary=summary,
+            vessel_analytics=vessel_analytics,
+            output_file_path=final_spill_data_path,
+        )
+        summary["final_spill_data_path"] = final_spill_data_path
+        summary["consolidated_analytics"] = consolidated
 
         return summary

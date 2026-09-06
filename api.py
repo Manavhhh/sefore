@@ -4,6 +4,7 @@ Smart India Hackathon 2026 - PS ID: SIH26143
 """
 
 import os
+import json
 import shutil
 import tempfile
 from typing import Dict, Any
@@ -120,16 +121,29 @@ def detect_sample(sample_name: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Detection failed: {str(e)}")
 
+@app.get("/final-spill-data")
+def get_final_spill_data():
+    """
+    Returns the latest consolidated analytics JSON containing SAR detection metrics
+    and AIS vessel identification / attribution intelligence.
+    """
+    file_path = os.path.join(OUTPUT_DIR, "final_spill_data.json")
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Consolidated analytics 'final_spill_data.json' not found. Run detection first.")
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
 @app.get("/download/{file_type}")
 def download_output_file(file_type: str):
     """
-    Download generated output files: mask, overlay, preprocessed, or geojson.
+    Download generated output files: mask, overlay, preprocessed, geojson, or final_spill_data.
     """
     mapping = {
         "mask": os.path.join(OUTPUT_DIR, "mask.png"),
         "overlay": os.path.join(OUTPUT_DIR, "overlay.png"),
         "preprocessed": os.path.join(OUTPUT_DIR, "preprocessed.png"),
         "geojson": os.path.join(OUTPUT_DIR, "spill.geojson"),
+        "final_spill_data": os.path.join(OUTPUT_DIR, "final_spill_data.json"),
     }
     file_path = mapping.get(file_type)
     if not file_path or not os.path.exists(file_path):
@@ -140,8 +154,16 @@ def download_output_file(file_type: str):
         "overlay": "image/png",
         "preprocessed": "image/png",
         "geojson": "application/geo+json",
+        "final_spill_data": "application/json",
     }
-    filename = f"oil_spill_{file_type}.{'png' if file_type != 'geojson' else 'geojson'}"
+    ext_map = {
+        "mask": "png",
+        "overlay": "png",
+        "preprocessed": "png",
+        "geojson": "geojson",
+        "final_spill_data": "json",
+    }
+    filename = "final_spill_data.json" if file_type == "final_spill_data" else f"oil_spill_{file_type}.{ext_map[file_type]}"
     return FileResponse(file_path, media_type=media_types[file_type], filename=filename)
 
 # Mount static files and frontend

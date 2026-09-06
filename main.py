@@ -72,10 +72,21 @@ def main():
     print(f"GeoJSON: {results['geojson_path']}")
     print(f"Mask: {results['mask_path']}")
     print(f"Overlay: {results['overlay_path']}")
+    print(f"Consolidated Analytics: {results.get('final_spill_data_path')}")
     print("---------------------------------------------------------")
-    print("Note: This module detects and geolocates suspected oil-spill regions from Sentinel-1 SAR imagery.")
-    print("      Vessel responsibility is NOT determined by this module.")
-    print("      The resulting spill location will later be passed to the ocean-drift and AIS correlation modules.")
+
+    v_analytics = results.get("vessel_analytics", {})
+    prime = v_analytics.get("primary_suspect")
+    if prime:
+        print("\n============= MARITIME VESSEL IDENTIFICATION =============")
+        print(f"Sector Vessels Tracked : {v_analytics.get('total_vessels_tracked')}")
+        print(f"Prime Suspect Vessel   : {prime['name']} (MMSI: {prime['mmsi']})")
+        print(f"Vessel Type & Flag     : {prime['vessel_type']} [{prime['flag']}]")
+        print(f"Distance to Spill CPA  : {prime['distance_to_centroid_km']} km")
+        print(f"Suspect Index & Tier   : {prime['suspect_score']}% ({prime['risk_tier']})")
+        print(f"CPA Timestamp          : {prime['cpa_timestamp']}")
+        print(f"Enforcement Directive  : {results.get('consolidated_analytics', {}).get('vessel_identification_analytics', {}).get('enforcement_recommendation')}")
+        print("==========================================================")
 
 if __name__ == "__main__":
     main()

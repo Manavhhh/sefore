@@ -45,21 +45,26 @@ def build_netlify_package():
             "total_estimated_area_km2": res["total_estimated_area_km2"],
             "total_estimated_area_m2": res["total_estimated_area_m2"],
             "features": res["features"],
+            "vessel_analytics": res.get("vessel_analytics", {}),
             "mask_url": f"samples/{sample_id}/mask.png",
             "overlay_url": f"samples/{sample_id}/overlay.png",
             "sar_url": f"samples/{sample_id}/preprocessed.png",
             "geojson_url": f"samples/{sample_id}/spill.geojson",
+            "final_spill_data_url": f"samples/{sample_id}/final_spill_data.json",
         })
-        print(f"  Rendered {s}: {res['detected_regions_count']} regions, {res['total_estimated_area_km2']} km²")
+        print(f"  Rendered {s}: {res['detected_regions_count']} regions, {res['total_estimated_area_km2']} km², Top Suspect: {res.get('vessel_analytics', {}).get('primary_suspect', {}).get('name')}")
 
     with open(os.path.join(dist_dir, "samples_manifest.json"), "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2)
+    # Also copy to root for local dev
+    with open("samples_manifest.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
 
     # 3. Create _redirects file for Netlify
     with open(os.path.join(dist_dir, "_redirects"), "w", encoding="utf-8") as f:
         f.write("/*    /index.html   200\n")
 
-    print("\n[SUCCESS] Netlify package generated in 'dist/' directory!")
+    print("\n[SUCCESS] Netlify package generated in 'dist/' directory with vessel attribution!")
 
 if __name__ == "__main__":
     build_netlify_package()
