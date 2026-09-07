@@ -1,0 +1,323 @@
+{
+  "benchmark_metadata": {
+    "dataset": "Zenodo Sentinel-1 SAR Oil Spill Dataset (Record 8346860)",
+    "detector": "ClassicalDetector (Baseline Computer Vision)",
+    "hyperparameters": {
+      "adaptive_block_size": 101,
+      "adaptive_c": 25.0,
+      "max_intensity_threshold": 35,
+      "min_area_pixels": 250,
+      "max_area_fraction": 0.35,
+      "morph_kernel_size": 5,
+      "border_margin": 15
+    },
+    "total_available_samples": 10,
+    "successfully_evaluated_samples": 10,
+    "failed_samples_count": 0,
+    "failed_samples": []
+  },
+  "aggregate_metrics": {
+    "mean_iou": 0.5482,
+    "mean_dice": 0.6882,
+    "mean_precision": 0.6587,
+    "mean_recall": 0.7995,
+    "median_iou": 0.5831,
+    "median_dice": 0.7366,
+    "median_precision": 0.626,
+    "median_recall": 0.7864,
+    "min_iou": 0.2374,
+    "max_iou": 0.7958
+  },
+  "per_sample_evaluations": [
+    {
+      "sample_id": "00000",
+      "image_file": "00000.tif",
+      "mask_file": "00000.tif",
+      "metrics": {
+        "iou": 0.5937,
+        "dice": 0.7451,
+        "precision": 0.613,
+        "recall": 0.9497
+      },
+      "pixels": {
+        "true_positive": 13808,
+        "predicted": 22525,
+        "ground_truth": 14539
+      },
+      "detection_summary": {
+        "detected_regions_count": 16,
+        "highest_heuristic_confidence": 0.98,
+        "total_estimated_area_km2": 1.2124,
+        "total_estimated_area_m2": 1212451.35
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00000/mask.png",
+        "overlay": "output/eval_results/00000/overlay.png",
+        "ground_truth": "output/eval_results/00000/ground_truth.png",
+        "comparison": "output/eval_results/00000/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00000/spill.geojson"
+      }
+    },
+    {
+      "sample_id": "00002",
+      "image_file": "00002.tif",
+      "mask_file": "00002.tif",
+      "metrics": {
+        "iou": 0.2374,
+        "dice": 0.3838,
+        "precision": 0.2374,
+        "recall": 1.0
+      },
+      "pixels": {
+        "true_positive": 16314,
+        "predicted": 68706,
+        "ground_truth": 16314
+      },
+      "detection_summary": {
+        "detected_regions_count": 68,
+        "highest_heuristic_confidence": 0.98,
+        "total_estimated_area_km2": 3.6207,
+        "total_estimated_area_m2": 3620978.52
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00002/mask.png",
+        "overlay": "output/eval_results/00002/overlay.png",
+        "ground_truth": "output/eval_results/00002/ground_truth.png",
+        "comparison": "output/eval_results/00002/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00002/spill.geojson"
+      }
+    },
+    {
+      "sample_id": "00003",
+      "image_file": "00003.tif",
+      "mask_file": "00003.tif",
+      "metrics": {
+        "iou": 0.3151,
+        "dice": 0.4792,
+        "precision": 0.3485,
+        "recall": 0.7663
+      },
+      "pixels": {
+        "true_positive": 18998,
+        "predicted": 54507,
+        "ground_truth": 24791
+      },
+      "detection_summary": {
+        "detected_regions_count": 36,
+        "highest_heuristic_confidence": 0.98,
+        "total_estimated_area_km2": 3.2666,
+        "total_estimated_area_m2": 3266805.01
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00003/mask.png",
+        "overlay": "output/eval_results/00003/overlay.png",
+        "ground_truth": "output/eval_results/00003/ground_truth.png",
+        "comparison": "output/eval_results/00003/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00003/spill.geojson"
+      }
+    },
+    {
+      "sample_id": "00004",
+      "image_file": "00004.tif",
+      "mask_file": "00004.tif",
+      "metrics": {
+        "iou": 0.5724,
+        "dice": 0.7281,
+        "precision": 0.6391,
+        "recall": 0.8458
+      },
+      "pixels": {
+        "true_positive": 37258,
+        "predicted": 58297,
+        "ground_truth": 44049
+      },
+      "detection_summary": {
+        "detected_regions_count": 13,
+        "highest_heuristic_confidence": 0.98,
+        "total_estimated_area_km2": 3.4186,
+        "total_estimated_area_m2": 3418497.35
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00004/mask.png",
+        "overlay": "output/eval_results/00004/overlay.png",
+        "ground_truth": "output/eval_results/00004/ground_truth.png",
+        "comparison": "output/eval_results/00004/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00004/spill.geojson"
+      }
+    },
+    {
+      "sample_id": "00006",
+      "image_file": "00006.tif",
+      "mask_file": "00006.tif",
+      "metrics": {
+        "iou": 0.7234,
+        "dice": 0.8395,
+        "precision": 0.9624,
+        "recall": 0.7444
+      },
+      "pixels": {
+        "true_positive": 66533,
+        "predicted": 69132,
+        "ground_truth": 89378
+      },
+      "detection_summary": {
+        "detected_regions_count": 6,
+        "highest_heuristic_confidence": 0.98,
+        "total_estimated_area_km2": 4.2359,
+        "total_estimated_area_m2": 4235951.86
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00006/mask.png",
+        "overlay": "output/eval_results/00006/overlay.png",
+        "ground_truth": "output/eval_results/00006/ground_truth.png",
+        "comparison": "output/eval_results/00006/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00006/spill.geojson"
+      }
+    },
+    {
+      "sample_id": "00007",
+      "image_file": "00007.tif",
+      "mask_file": "00007.tif",
+      "metrics": {
+        "iou": 0.7958,
+        "dice": 0.8863,
+        "precision": 0.9462,
+        "recall": 0.8335
+      },
+      "pixels": {
+        "true_positive": 58992,
+        "predicted": 62345,
+        "ground_truth": 70772
+      },
+      "detection_summary": {
+        "detected_regions_count": 3,
+        "highest_heuristic_confidence": 0.98,
+        "total_estimated_area_km2": 5.0916,
+        "total_estimated_area_m2": 5091598.47
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00007/mask.png",
+        "overlay": "output/eval_results/00007/overlay.png",
+        "ground_truth": "output/eval_results/00007/ground_truth.png",
+        "comparison": "output/eval_results/00007/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00007/spill.geojson"
+      }
+    },
+    {
+      "sample_id": "00008",
+      "image_file": "00008.tif",
+      "mask_file": "00008.tif",
+      "metrics": {
+        "iou": 0.7795,
+        "dice": 0.8761,
+        "precision": 0.9798,
+        "recall": 0.7922
+      },
+      "pixels": {
+        "true_positive": 79653,
+        "predicted": 81293,
+        "ground_truth": 100549
+      },
+      "detection_summary": {
+        "detected_regions_count": 1,
+        "highest_heuristic_confidence": 0.8064,
+        "total_estimated_area_km2": 6.6183,
+        "total_estimated_area_m2": 6618277.37
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00008/mask.png",
+        "overlay": "output/eval_results/00008/overlay.png",
+        "ground_truth": "output/eval_results/00008/ground_truth.png",
+        "comparison": "output/eval_results/00008/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00008/spill.geojson"
+      }
+    },
+    {
+      "sample_id": "00009",
+      "image_file": "00009.tif",
+      "mask_file": "00009.tif",
+      "metrics": {
+        "iou": 0.6475,
+        "dice": 0.786,
+        "precision": 0.7915,
+        "recall": 0.7807
+      },
+      "pixels": {
+        "true_positive": 35123,
+        "predicted": 44377,
+        "ground_truth": 44991
+      },
+      "detection_summary": {
+        "detected_regions_count": 21,
+        "highest_heuristic_confidence": 0.98,
+        "total_estimated_area_km2": 3.467,
+        "total_estimated_area_m2": 3467123.55
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00009/mask.png",
+        "overlay": "output/eval_results/00009/overlay.png",
+        "ground_truth": "output/eval_results/00009/ground_truth.png",
+        "comparison": "output/eval_results/00009/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00009/spill.geojson"
+      }
+    },
+    {
+      "sample_id": "00010",
+      "image_file": "00010.tif",
+      "mask_file": "00010.tif",
+      "metrics": {
+        "iou": 0.3741,
+        "dice": 0.5445,
+        "precision": 0.543,
+        "recall": 0.5461
+      },
+      "pixels": {
+        "true_positive": 34141,
+        "predicted": 62874,
+        "ground_truth": 62520
+      },
+      "detection_summary": {
+        "detected_regions_count": 51,
+        "highest_heuristic_confidence": 0.98,
+        "total_estimated_area_km2": 4.9252,
+        "total_estimated_area_m2": 4925151.36
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00010/mask.png",
+        "overlay": "output/eval_results/00010/overlay.png",
+        "ground_truth": "output/eval_results/00010/ground_truth.png",
+        "comparison": "output/eval_results/00010/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00010/spill.geojson"
+      }
+    },
+    {
+      "sample_id": "00203",
+      "image_file": "00203.tif",
+      "mask_file": "00203.tif",
+      "metrics": {
+        "iou": 0.4428,
+        "dice": 0.6138,
+        "precision": 0.5265,
+        "recall": 0.7359
+      },
+      "pixels": {
+        "true_positive": 5942,
+        "predicted": 11286,
+        "ground_truth": 8075
+      },
+      "detection_summary": {
+        "detected_regions_count": 14,
+        "highest_heuristic_confidence": 0.98,
+        "total_estimated_area_km2": 0.8373,
+        "total_estimated_area_m2": 837322.01
+      },
+      "artifacts": {
+        "pred_mask": "output/eval_results/00203/mask.png",
+        "overlay": "output/eval_results/00203/overlay.png",
+        "ground_truth": "output/eval_results/00203/ground_truth.png",
+        "comparison": "output/eval_results/00203/gt_vs_pred_comparison.png",
+        "geojson": "output/eval_results/00203/spill.geojson"
+      }
+    }
+  ]
+}

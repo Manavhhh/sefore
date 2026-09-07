@@ -13,6 +13,13 @@ env/
 # Large satellite archive files
 data/*.7z
 output/eval_temp/
+dist.zip
+
+# Avoid duplicating raw GeoTIFFs in validation folder (regenerated via scripts/prepare_validation_dataset.py)
+data/zenodo_validation/images/
+data/zenodo_validation/masks/
+data/zenodo_validation/_temp_masks/
+!data/zenodo_validation/manifest.json
 
 # Keep data directory structure intact
 !data/images/

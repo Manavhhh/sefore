@@ -8,6 +8,7 @@ import json
 import shutil
 import tempfile
 from typing import Dict, Any
+import numpy as np
 from fastapi import FastAPI, File, UploadFile, HTTPException, Query
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -121,17 +122,94 @@ def detect_sample(sample_name: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Detection failed: {str(e)}")
 
-@app.get("/final-spill-data")
-def get_final_spill_data():
+@app.get("/validation/samples")
+def list_validation_samples():
     """
-    Returns the latest consolidated analytics JSON containing SAR detection metrics
-    and AIS vessel identification / attribution intelligence.
+    Returns list of real Zenodo Sentinel-1 validation samples paired with ground truth.
     """
-    file_path = os.path.join(OUTPUT_DIR, "final_spill_data.json")
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="Consolidated analytics 'final_spill_data.json' not found. Run detection first.")
-    with open(file_path, "r", encoding="utf-8") as f:
+    manifest_path = "data/zenodo_validation/manifest.json"
+    if os.path.exists(manifest_path):
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            return {"samples": json.load(f)}
+    
+    val_images_dir = "data/zenodo_validation/images"
+    if not os.path.exists(val_images_dir):
+        return {"samples": []}
+    files = sorted([f for f in os.listdir(val_images_dir) if f.endswith(".tif")])
+    return {"samples": [{"sample_id": os.path.splitext(f)[0], "image_filename": f} for f in files]}
+
+@app.get("/validation/summary")
+def get_validation_summary():
+    """
+    Returns aggregate benchmark metrics for the ClassicalDetector across real Zenodo samples.
+    """
+    eval_json = "output/evaluation_results.json"
+    if not os.path.exists(eval_json):
+        raise HTTPException(status_code=404, detail="Evaluation results not found. Run evaluate.py first.")
+    with open(eval_json, "r", encoding="utf-8") as f:
         return json.load(f)
+
+@app.get("/validation/evaluate/{sample_name}")
+def evaluate_validation_sample(sample_name: str):
+    """
+    Runs detection on a Zenodo validation sample, compares with real Ground Truth,
+    and returns detection metrics alongside actual IoU, Dice, Precision, Recall.
+    """
+    from src.evaluation import SegmentationEvaluator
+    import rasterio
+
+    if not sample_name.endswith(".tif"):
+        sample_name += ".tif"
+
+    img_path = os.path.join("data/zenodo_validation/images", sample_name)
+    mask_path = os.path.join("data/zenodo_validation/masks", sample_name)
+
+    if not os.path.exists(img_path):
+        raise HTTPException(status_code=404, detail=f"Validation image '{sample_name}' not found.")
+
+    sample_id = os.path.splitext(sample_name)[0]
+    sample_out = os.path.join("output/eval_results", sample_id)
+    os.makedirs(sample_out, exist_ok=True)
+
+    try:
+        # Run detection pipeline
+        res = pipeline.process_image(input_path=img_path, output_dir=sample_out)
+
+        # Compute ground truth evaluation if mask exists
+        metrics = None
+        has_gt = os.path.exists(mask_path)
+        if has_gt:
+            with rasterio.open(res["mask_path"]) as p_src:
+                pred_mask = p_src.read(1) > 0
+            with rasterio.open(mask_path) as gt_src:
+                gt_mask = gt_src.read(1) > 0
+
+            metrics = SegmentationEvaluator.evaluate(pred_mask=pred_mask, gt_mask=gt_mask)
+
+            # Generate comparison visual if not exists
+            comp_path = os.path.join(sample_out, "gt_vs_pred_comparison.png")
+            gt_img_path = os.path.join(sample_out, "ground_truth.png")
+
+            comp_rgb = np.zeros((pred_mask.shape[0], pred_mask.shape[1], 3), dtype=np.uint8)
+            tp_idx = np.logical_and(pred_mask, gt_mask)
+            fp_idx = np.logical_and(pred_mask, ~gt_mask)
+            fn_idx = np.logical_and(~pred_mask, gt_mask)
+            comp_rgb[tp_idx] = [0, 230, 80]    # Green = TP
+            comp_rgb[fp_idx] = [230, 40, 40]    # Red = FP
+            comp_rgb[fn_idx] = [40, 120, 240]   # Blue = FN
+
+            import cv2
+            cv2.imwrite(comp_path, cv2.cvtColor(comp_rgb, cv2.COLOR_RGB2BGR))
+            cv2.imwrite(gt_img_path, (gt_mask.astype(np.uint8)) * 255)
+
+            res["ground_truth_metrics"] = metrics
+            res["ground_truth_path"] = gt_img_path.replace("\\", "/")
+            res["comparison_path"] = comp_path.replace("\\", "/")
+
+        return res
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Validation evaluation failed: {str(e)}")
 
 @app.get("/download/{file_type}")
 def download_output_file(file_type: str):

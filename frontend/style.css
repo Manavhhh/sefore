@@ -103,6 +103,44 @@ body {
   border-radius: 20px;
 }
 
+.badge-valid {
+  background: rgba(16, 185, 129, 0.18) !important;
+  color: #10b981 !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.18) !important;
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+.gt-legend {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.dot-tp { background: #00e650; }
+.dot-fp { background: #e62828; }
+.dot-fn { background: #2878f0; }
+
 .subtitle {
   font-size: 0.82rem;
   color: var(--text-secondary);

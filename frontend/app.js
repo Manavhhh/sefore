@@ -45,10 +45,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // Imagery Panels & JSON Viewer
   const imgOverlay = document.getElementById("img-overlay");
   const imgMask = document.getElementById("img-mask");
+  const imgGt = document.getElementById("img-gt");
+  const imgComp = document.getElementById("img-comp");
   const imgSar = document.getElementById("img-sar");
   const jsonCodeBlock = document.getElementById("json-code-block");
   const btnCopyJson = document.getElementById("btn-copy-json");
   const btnDownloadTabJson = document.getElementById("btn-download-tab-json");
+
+  // Ground-Truth Validation Metric Displays
+  const metricGtIou = document.getElementById("metric-gt-iou");
+  const metricGtDice = document.getElementById("metric-gt-dice");
+  const metricGtPrecision = document.getElementById("metric-gt-precision");
+  const metricGtRecall = document.getElementById("metric-gt-recall");
+  const gtMetricDetail = document.getElementById("gt-metric-detail");
+  const gtBadge = document.getElementById("gt-badge");
 
   // Modal Elements
   const analyticsModal = document.getElementById("analytics-modal");
@@ -232,14 +242,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Fallback Predefined Scenes (always available instantly)
+  // Fallback Predefined Real Zenodo Validation Scenes (always available instantly)
   const defaultScenes = [
-    { name: "00000.tif", id: "00000", count: 16, area: "1.21", prime: "NORDIC TITAN" },
-    { name: "00002.tif", id: "00002", count: 68, area: "3.62", prime: "NORDIC TITAN" },
-    { name: "00004.tif", id: "00004", count: 13, area: "3.42", prime: "NORDIC TITAN" },
-    { name: "00006.tif", id: "00006", count: 6, area: "4.24", prime: "NORDIC TITAN" },
-    { name: "00007.tif", id: "00007", count: 3, area: "5.09", prime: "NORDIC TITAN" },
-    { name: "00008.tif", id: "00008", count: 1, area: "6.62", prime: "NORDIC TITAN" },
+    { name: "00000.tif", id: "00000", count: 16, area: "1.21", iou: "59.4%", dice: "74.5%" },
+    { name: "00002.tif", id: "00002", count: 68, area: "3.62", iou: "23.7%", dice: "38.4%" },
+    { name: "00003.tif", id: "00003", count: 36, area: "3.27", iou: "31.5%", dice: "47.9%" },
+    { name: "00004.tif", id: "00004", count: 13, area: "3.42", iou: "57.2%", dice: "72.8%" },
+    { name: "00006.tif", id: "00006", count: 6,  area: "4.24", iou: "72.3%", dice: "84.0%" },
+    { name: "00007.tif", id: "00007", count: 3,  area: "5.09", iou: "79.6%", dice: "88.6%" },
+    { name: "00008.tif", id: "00008", count: 1,  area: "6.62", iou: "78.0%", dice: "87.6%" },
+    { name: "00009.tif", id: "00009", count: 21, area: "3.47", iou: "64.8%", dice: "78.6%" },
+    { name: "00010.tif", id: "00010", count: 51, area: "4.93", iou: "37.4%", dice: "54.5%" },
+    { name: "00203.tif", id: "00203", count: 14, area: "0.84", iou: "44.3%", dice: "61.4%" },
   ];
 
   function populateDropdownWithDefaultScenes() {
@@ -247,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     defaultScenes.forEach((s) => {
       const opt = document.createElement("option");
       opt.value = s.name;
-      opt.textContent = `${s.name} (${s.count} slicks, ${s.area} km² - Suspect: ${s.prime})`;
+      opt.textContent = `${s.name} (${s.count} slicks, ${s.area} km² | IoU: ${s.iou}, Dice: ${s.dice})`;
       sampleSelect.appendChild(opt);
     });
   }
@@ -279,7 +293,21 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn("Could not load static final_spill_data.json directly, trying API fallback:", err);
     }
 
-    // 2. Local live API fallback
+    // 2. Local live API fallback (prefer /validation/evaluate/ for Ground Truth metrics)
+    try {
+      const valResp = await fetch(`/validation/evaluate/${encodeURIComponent(sceneName)}`);
+      if (valResp.ok) {
+        const ct = valResp.headers.get("content-type") || "";
+        if (ct.includes("application/json")) {
+          const results = await valResp.json();
+          renderDetectionResults(results);
+          return;
+        }
+      }
+    } catch (valErr) {
+      // Continue to detect-sample fallback
+    }
+
     try {
       const resp = await fetch(`/detect-sample/${encodeURIComponent(sceneName)}`);
       if (resp.ok) {
@@ -308,6 +336,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const prime = vAn.prime_suspect_vessel;
     const rankedVessels = vAn.ranked_suspect_leaderboard || [];
 
+    // Find static manifest entry if present for Ground Truth metrics
+    const manifestItem = (staticManifest || []).find((m) => m.id === sampleId || m.name === sceneName);
+
     // Synthesize results object
     const results = {
       name: sceneName,
@@ -326,6 +357,10 @@ document.addEventListener("DOMContentLoaded", () => {
       overlay_url: `samples/${sampleId}/overlay.png`,
       mask_url: `samples/${sampleId}/mask.png`,
       sar_url: `samples/${sampleId}/preprocessed.png`,
+      ground_truth_url: `samples/${sampleId}/ground_truth.png`,
+      comparison_url: `samples/${sampleId}/gt_vs_pred_comparison.png`,
+      ground_truth_metrics: manifestItem ? (manifestItem.metrics || manifestItem.ground_truth_metrics) : null,
+      pixels: manifestItem ? manifestItem.pixels : null,
       consolidated_analytics: data,
     };
 
@@ -364,15 +399,49 @@ document.addEventListener("DOMContentLoaded", () => {
     btnDownloadGeoJSON.disabled = !results.features || results.features.length === 0;
 
     // 2. Update Imagery Views
+    const sampleId = (results.name || "").replace(".tif", "").replace(".tiff", "");
     if (isStatic) {
-      imgOverlay.src = results.overlay_url;
-      imgMask.src = results.mask_url;
-      imgSar.src = results.sar_url;
+      imgOverlay.src = results.overlay_url || `samples/${sampleId}/overlay.png`;
+      imgMask.src = results.mask_url || `samples/${sampleId}/mask.png`;
+      imgSar.src = results.sar_url || `samples/${sampleId}/preprocessed.png`;
+      if (imgGt) imgGt.src = results.ground_truth_url || `samples/${sampleId}/ground_truth.png`;
+      if (imgComp) imgComp.src = results.comparison_url || `samples/${sampleId}/gt_vs_pred_comparison.png`;
     } else {
       const ts = new Date().getTime();
       imgOverlay.src = `/output/overlay.png?t=${ts}`;
       imgMask.src = `/output/mask.png?t=${ts}`;
       imgSar.src = `/output/preprocessed.png?t=${ts}`;
+      if (imgGt) imgGt.src = (results.ground_truth_path ? `/${results.ground_truth_path}` : `/output/eval_results/${sampleId}/ground_truth.png`) + `?t=${ts}`;
+      if (imgComp) imgComp.src = (results.comparison_path ? `/${results.comparison_path}` : `/output/eval_results/${sampleId}/gt_vs_pred_comparison.png`) + `?t=${ts}`;
+    }
+
+    // 2B. Ground Truth Validation Metrics
+    const gt = results.ground_truth_metrics || results.metrics;
+    if (gt && typeof gt.iou !== 'undefined') {
+      if (metricGtIou) metricGtIou.textContent = typeof gt.iou === 'number' ? `${(gt.iou * 100).toFixed(1)}%` : gt.iou;
+      if (metricGtDice) metricGtDice.textContent = typeof gt.dice === 'number' ? `${(gt.dice * 100).toFixed(1)}%` : gt.dice;
+      if (metricGtPrecision) metricGtPrecision.textContent = typeof gt.precision === 'number' ? `${(gt.precision * 100).toFixed(1)}%` : gt.precision;
+      if (metricGtRecall) metricGtRecall.textContent = typeof gt.recall === 'number' ? `${(gt.recall * 100).toFixed(1)}%` : gt.recall;
+      if (gtBadge) {
+        gtBadge.textContent = "VERIFIED REAL GT";
+        gtBadge.className = "badge badge-valid";
+      }
+      if (gtMetricDetail) {
+        const tp = results.pixels?.true_positive || gt.tp_pixels || "--";
+        const predPx = results.pixels?.predicted || gt.pred_pixels || "--";
+        const gtPx = results.pixels?.ground_truth || gt.gt_pixels || "--";
+        gtMetricDetail.textContent = `Calculated against real Zenodo mask (TP: ${typeof tp === 'number' ? tp.toLocaleString() : tp} px, Pred: ${typeof predPx === 'number' ? predPx.toLocaleString() : predPx} px, GT: ${typeof gtPx === 'number' ? gtPx.toLocaleString() : gtPx} px).`;
+      }
+    } else {
+      if (metricGtIou) metricGtIou.textContent = "--";
+      if (metricGtDice) metricGtDice.textContent = "--";
+      if (metricGtPrecision) metricGtPrecision.textContent = "--";
+      if (metricGtRecall) metricGtRecall.textContent = "--";
+      if (gtBadge) {
+        gtBadge.textContent = "UNANNOTATED";
+        gtBadge.className = "badge";
+      }
+      if (gtMetricDetail) gtMetricDetail.textContent = "Ground truth mask comparison pending for this scene.";
     }
 
     // Hide placeholder messages as images are loaded
@@ -709,8 +778,8 @@ document.addEventListener("DOMContentLoaded", () => {
         manifest.forEach((item) => {
           const opt = document.createElement("option");
           opt.value = item.name;
-          const primeName = item.primary_suspect_name || "Correlated";
-          opt.textContent = `${item.name} (${item.detected_regions_count} slicks, ${item.total_estimated_area_km2} km² - Suspect: ${primeName})`;
+          const iouStr = item.metrics?.iou ? ` | IoU: ${(item.metrics.iou * 100).toFixed(1)}%, Dice: ${(item.metrics.dice * 100).toFixed(1)}%` : "";
+          opt.textContent = `${item.name} (${item.detected_regions_count} slicks, ${item.total_estimated_area_km2} km²${iouStr})`;
           sampleSelect.appendChild(opt);
         });
         sampleSelect.value = currentResults?.name || manifest[0].name;

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Geospatial Conversion and Physical Area Calculation Module.
 Transforms image pixel coordinates to EPSG:4326 coordinates,
@@ -31,7 +32,10 @@ class GeospatialConverter:
         X = a * col + b * row + c
         Y = d * col + e * row + f
         """
-        x_geo, y_geo = self.affine * (col, row)
+        try:
+            x_geo, y_geo = self.affine @ (col, row)
+        except (TypeError, AttributeError):
+            x_geo, y_geo = self.affine * (col, row)
         return float(x_geo), float(y_geo)
 
     def contour_to_polygon(self, contour: np.ndarray) -> Optional[Polygon]:
@@ -75,7 +79,7 @@ class GeospatialConverter:
 
     def calculate_physical_area(self, poly_4326: Polygon, centroid_lon: float, centroid_lat: float) -> Dict[str, float]:
         """
-        Calculates physical area in m² and km² by projecting the EPSG:4326 polygon
+        Calculates physical area in m2 and km2 by projecting the EPSG:4326 polygon
         to the appropriate local UTM projection.
         """
         utm_epsg = self.get_utm_epsg(centroid_lon, centroid_lat)
@@ -110,7 +114,7 @@ class GeospatialConverter:
         # Convert centroid pixel to geographic coordinates
         c_lon, c_lat = self.pixel_to_geographic(candidate.centroid[0], candidate.centroid[1])
 
-        # Compute metric area in m² and km²
+        # Compute metric area in m2 and km2
         area_metrics = self.calculate_physical_area(poly, c_lon, c_lat)
 
         # Convert bbox corners to geographic coordinates

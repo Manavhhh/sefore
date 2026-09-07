@@ -20,8 +20,8 @@
       <div class="brand">
         <div class="radar-pulse"></div>
         <div>
-          <h1>Sefore <span class="badge">SIH 2026</span><span class="badge badge-vessel">AIS ATTRIBUTION ACTIVE</span></h1>
-          <p class="subtitle">PS ID: SIH26143 &bull; Satellite SAR Oil Spill Geolocation & AIS Vessel Suspect Identification</p>
+          <h1>Sefore <span class="badge">SIH 2026</span><span class="badge badge-valid">SAR DETECTION VALIDATED</span><span class="badge badge-warning">AIS ATTRIBUTION (DEMO)</span></h1>
+          <p class="subtitle">PS ID: SIH26143 &bull; Satellite SAR Oil Spill Geolocation & Detection Module (Zenodo Ground-Truth Validated)</p>
         </div>
       </div>
       <div class="nav-actions">
@@ -86,7 +86,7 @@
               <span class="metric-value" id="metric-regions">--</span>
             </div>
             <div class="metric-box">
-              <span class="metric-label">Heuristic Conf.</span>
+              <span class="metric-label" title="Heuristic feature score (contrast, size, shape, border). NOT a calibrated model probability or IoU.">Heuristic Conf. ℹ️</span>
               <span class="metric-value text-accent" id="metric-confidence">--</span>
             </div>
             <div class="metric-box">
@@ -118,14 +118,49 @@
           </div>
         </section>
 
-        <!-- 3. AIS Vessel Attribution & Suspect Identification -->
+        <!-- 2B. Real Ground-Truth Validation Metrics -->
+        <section class="card glass-card" id="card-gt-validation">
+          <div class="section-title between">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="step-badge badge-valid">GT</span>
+              <h2>Zenodo GT Validation</h2>
+            </div>
+            <span class="badge badge-valid" id="gt-badge">EVALUATED</span>
+          </div>
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <span class="metric-label">IoU (Jaccard)</span>
+              <span class="metric-value text-accent" id="metric-gt-iou">--</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Dice (F1)</span>
+              <span class="metric-value text-accent" id="metric-gt-dice">--</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Precision</span>
+              <span class="metric-value" id="metric-gt-precision">--</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Recall</span>
+              <span class="metric-value" id="metric-gt-recall">--</span>
+            </div>
+          </div>
+          <div style="margin-top: 8px; font-size: 0.74rem; color: var(--text-secondary); line-height: 1.4;">
+            <span id="gt-metric-detail">Empirical benchmark calculated against real Zenodo ground-truth mask.</span>
+          </div>
+        </section>
+
+        <!-- 3. AIS Vessel Attribution & Suspect Identification (FUTURE MODULE - SIMULATED FOR PROTOTYPE) -->
         <section class="card glass-card" id="vessel-attribution-card">
           <div class="section-title between">
             <div style="display:flex; align-items:center; gap:8px;">
               <span class="step-badge badge-alert">3</span>
               <h2>Vessel Identification</h2>
             </div>
-            <span class="vessel-count-badge" id="vessel-count">0 Tracked</span>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="badge badge-warning">DEMO / SIMULATED</span>
+              <span class="vessel-count-badge" id="vessel-count">0 Tracked</span>
+            </div>
           </div>
 
           <!-- Prime Suspect Banner -->
@@ -224,10 +259,12 @@
         <!-- Imagery & Consolidated JSON Inspection Carousel / Gallery -->
         <div class="inspection-card glass-card">
           <div class="tab-header">
-            <button class="tab-btn active" data-target="panel-overlay">Spill Detection Overlay</button>
-            <button class="tab-btn" data-target="panel-mask">Binary Segmentation Mask</button>
+            <button class="tab-btn active" data-target="panel-overlay">Detection Overlay</button>
+            <button class="tab-btn" data-target="panel-mask">Predicted Mask</button>
+            <button class="tab-btn" data-target="panel-gt">Ground-Truth Mask</button>
+            <button class="tab-btn" data-target="panel-comp">GT vs Pred Benchmark</button>
             <button class="tab-btn" data-target="panel-sar">Calibrated SAR (dB)</button>
-            <button class="tab-btn" data-target="panel-json">Consolidated final_spill_data.json</button>
+            <button class="tab-btn" data-target="panel-json">final_spill_data.json</button>
           </div>
           <div class="tab-content">
             <div class="tab-panel active" id="panel-overlay">
@@ -237,6 +274,19 @@
             <div class="tab-panel" id="panel-mask">
               <img id="img-mask" src="" alt="Run detection to generate mask">
               <div class="placeholder-text">Awaiting SAR analysis...</div>
+            </div>
+            <div class="tab-panel" id="panel-gt">
+              <img id="img-gt" src="" alt="Real Ground-Truth Mask">
+              <div class="placeholder-text">Ground truth available for Zenodo validation scenes...</div>
+            </div>
+            <div class="tab-panel" id="panel-comp">
+              <img id="img-comp" src="" alt="Ground Truth vs Prediction Comparison">
+              <div class="gt-legend">
+                <div class="legend-item"><span class="legend-dot dot-tp"></span> <strong>True Positive</strong> (Correct Slick Detection)</div>
+                <div class="legend-item"><span class="legend-dot dot-fp"></span> <strong>False Positive</strong> (Low-Wind Look-Alike)</div>
+                <div class="legend-item"><span class="legend-dot dot-fn"></span> <strong>False Negative</strong> (Missed Ground-Truth)</div>
+              </div>
+              <div class="placeholder-text">Comparison overlay (Green=TP, Red=FP, Blue=FN)...</div>
             </div>
             <div class="tab-panel" id="panel-sar">
               <img id="img-sar" src="" alt="Run detection to generate preprocessed view">

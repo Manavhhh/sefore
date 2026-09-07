@@ -1,0 +1,632 @@
+[
+  {
+    "sample_id": "00000",
+    "image": {
+      "filename": "00000.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        3.9656639450910203,
+        0.0,
+        -8.983152841195215e-05,
+        55.33396508271642
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 3.9656639450910203,
+        "bottom": 55.14999011252874,
+        "right": 4.1496389152786985,
+        "top": 55.33396508271642
+      },
+      "min_value": -54.121,
+      "max_value": 5.546,
+      "mean_value": -27.528,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-33.30 dB)",
+        "band_2_id": "VV (median=-20.74 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00000.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 14539,
+      "foreground_percentage": 0.3466
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  },
+  {
+    "sample_id": "00002",
+    "image": {
+      "filename": "00002.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        5.90018590944241,
+        0.0,
+        -8.983152841195215e-05,
+        55.5435420385015
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 5.90018590944241,
+        "bottom": 55.35956706831382,
+        "right": 6.084160879630088,
+        "top": 55.5435420385015
+      },
+      "min_value": -50.258,
+      "max_value": -14.564,
+      "mean_value": -28.636,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-36.27 dB)",
+        "band_2_id": "VV (median=-20.75 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00002.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 16314,
+      "foreground_percentage": 0.389
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  },
+  {
+    "sample_id": "00003",
+    "image": {
+      "filename": "00003.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        5.845568340167943,
+        0.0,
+        -8.983152841195215e-05,
+        55.444996851833594
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 5.845568340167943,
+        "bottom": 55.26102188164592,
+        "right": 6.029543310355621,
+        "top": 55.444996851833594
+      },
+      "min_value": -52.836,
+      "max_value": -13.981,
+      "mean_value": -29.141,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-37.00 dB)",
+        "band_2_id": "VV (median=-21.00 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00003.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 24791,
+      "foreground_percentage": 0.5911
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  },
+  {
+    "sample_id": "00004",
+    "image": {
+      "filename": "00004.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        5.782596438751165,
+        0.0,
+        -8.983152841195215e-05,
+        55.343666887784906
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 5.782596438751165,
+        "bottom": 55.15969191759723,
+        "right": 5.966571408938843,
+        "top": 55.343666887784906
+      },
+      "min_value": -54.529,
+      "max_value": -0.688,
+      "mean_value": -29.538,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-37.38 dB)",
+        "band_2_id": "VV (median=-21.35 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00004.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 44049,
+      "foreground_percentage": 1.0502
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  },
+  {
+    "sample_id": "00006",
+    "image": {
+      "filename": "00006.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        5.615240301319698,
+        0.0,
+        -8.983152841195215e-05,
+        55.100223445788515
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 5.615240301319698,
+        "bottom": 54.91624847560084,
+        "right": 5.799215271507376,
+        "top": 55.100223445788515
+      },
+      "min_value": -54.782,
+      "max_value": 9.05,
+      "mean_value": -29.97,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-37.66 dB)",
+        "band_2_id": "VV (median=-21.74 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00006.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 89378,
+      "foreground_percentage": 2.1309
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  },
+  {
+    "sample_id": "00007",
+    "image": {
+      "filename": "00007.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        30.625126448259813,
+        0.0,
+        -8.983152841195215e-05,
+        32.269626175898125
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 30.625126448259813,
+        "bottom": 32.08565120571045,
+        "right": 30.80910141844749,
+        "top": 32.269626175898125
+      },
+      "min_value": -47.59,
+      "max_value": 25.424,
+      "mean_value": -23.873,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-29.96 dB)",
+        "band_2_id": "VV (median=-17.65 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00007.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 70772,
+      "foreground_percentage": 1.6873
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  },
+  {
+    "sample_id": "00008",
+    "image": {
+      "filename": "00008.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        30.577875064315126,
+        0.0,
+        -8.983152841195215e-05,
+        32.22569855850468
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 30.577875064315126,
+        "bottom": 32.041723588317005,
+        "right": 30.761850034502803,
+        "top": 32.22569855850468
+      },
+      "min_value": -47.59,
+      "max_value": -10.675,
+      "mean_value": -23.947,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-30.03 dB)",
+        "band_2_id": "VV (median=-17.70 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00008.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 100549,
+      "foreground_percentage": 2.3973
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  },
+  {
+    "sample_id": "00009",
+    "image": {
+      "filename": "00009.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        29.198322133239117,
+        0.0,
+        -8.983152841195215e-05,
+        32.63479208299711
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 29.198322133239117,
+        "bottom": 32.45081711280943,
+        "right": 29.382297103426794,
+        "top": 32.63479208299711
+      },
+      "min_value": -45.201,
+      "max_value": 17.246,
+      "mean_value": -23.622,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-31.33 dB)",
+        "band_2_id": "VV (median=-15.83 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00009.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 44991,
+      "foreground_percentage": 1.0727
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  },
+  {
+    "sample_id": "00010",
+    "image": {
+      "filename": "00010.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        29.131487476100624,
+        0.0,
+        -8.983152841195215e-05,
+        32.703153876118606
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 29.131487476100624,
+        "bottom": 32.51917890593093,
+        "right": 29.3154624462883,
+        "top": 32.703153876118606
+      },
+      "min_value": -44.71,
+      "max_value": -8.58,
+      "mean_value": -23.391,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-31.22 dB)",
+        "band_2_id": "VV (median=-15.46 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00010.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 62520,
+      "foreground_percentage": 1.4906
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  },
+  {
+    "sample_id": "00203",
+    "image": {
+      "filename": "00203.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "count": 2,
+      "dtype": "float32",
+      "crs": "EPSG:4326",
+      "affine_transform": [
+        8.983152841195215e-05,
+        0.0,
+        30.039217087685355,
+        0.0,
+        -8.983152841195215e-05,
+        33.473331853018664
+      ],
+      "pixel_resolution": [
+        8.983152841195215e-05,
+        8.983152841195215e-05
+      ],
+      "bounds": {
+        "left": 30.039217087685355,
+        "bottom": 33.28935688283099,
+        "right": 30.22319205787303,
+        "top": 33.473331853018664
+      },
+      "min_value": -47.116,
+      "max_value": 13.145,
+      "mean_value": -26.113,
+      "bands_polarization": {
+        "band_1_id": "VH (median=-32.52 dB)",
+        "band_2_id": "VV (median=-19.64 dB)",
+        "vv_band_index": 2,
+        "vh_band_index": 1
+      }
+    },
+    "mask": {
+      "filename": "00203.tif",
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "height": 2048,
+      "width": 2048,
+      "dtype": "uint8",
+      "unique_values": [
+        0,
+        1
+      ],
+      "foreground_pixel_count": 8075,
+      "foreground_percentage": 0.1925
+    },
+    "verification": {
+      "height_match": true,
+      "width_match": true,
+      "spatial_alignment_verified": true
+    }
+  }
+]

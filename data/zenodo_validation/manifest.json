@@ -1,0 +1,92 @@
+[
+  {
+    "sample_id": "00000",
+    "image_filename": "00000.tif",
+    "mask_filename": "00000.tif",
+    "image_path": "data/zenodo_validation/images/00000.tif",
+    "mask_path": "data/zenodo_validation/masks/00000.tif",
+    "image_bytes": 41552591,
+    "mask_bytes": 4211084
+  },
+  {
+    "sample_id": "00002",
+    "image_filename": "00002.tif",
+    "mask_filename": "00002.tif",
+    "image_path": "data/zenodo_validation/images/00002.tif",
+    "mask_path": "data/zenodo_validation/masks/00002.tif",
+    "image_bytes": 41233828,
+    "mask_bytes": 4211084
+  },
+  {
+    "sample_id": "00003",
+    "image_filename": "00003.tif",
+    "mask_filename": "00003.tif",
+    "image_path": "data/zenodo_validation/images/00003.tif",
+    "mask_path": "data/zenodo_validation/masks/00003.tif",
+    "image_bytes": 41274551,
+    "mask_bytes": 4211084
+  },
+  {
+    "sample_id": "00004",
+    "image_filename": "00004.tif",
+    "mask_filename": "00004.tif",
+    "image_path": "data/zenodo_validation/images/00004.tif",
+    "mask_path": "data/zenodo_validation/masks/00004.tif",
+    "image_bytes": 41316236,
+    "mask_bytes": 4211084
+  },
+  {
+    "sample_id": "00006",
+    "image_filename": "00006.tif",
+    "mask_filename": "00006.tif",
+    "image_path": "data/zenodo_validation/images/00006.tif",
+    "mask_path": "data/zenodo_validation/masks/00006.tif",
+    "image_bytes": 41467971,
+    "mask_bytes": 4211084
+  },
+  {
+    "sample_id": "00007",
+    "image_filename": "00007.tif",
+    "mask_filename": "00007.tif",
+    "image_path": "data/zenodo_validation/images/00007.tif",
+    "mask_path": "data/zenodo_validation/masks/00007.tif",
+    "image_bytes": 41857591,
+    "mask_bytes": 4211084
+  },
+  {
+    "sample_id": "00008",
+    "image_filename": "00008.tif",
+    "mask_filename": "00008.tif",
+    "image_path": "data/zenodo_validation/images/00008.tif",
+    "mask_path": "data/zenodo_validation/masks/00008.tif",
+    "image_bytes": 41854183,
+    "mask_bytes": 4211084
+  },
+  {
+    "sample_id": "00009",
+    "image_filename": "00009.tif",
+    "mask_filename": "00009.tif",
+    "image_path": "data/zenodo_validation/images/00009.tif",
+    "mask_path": "data/zenodo_validation/masks/00009.tif",
+    "image_bytes": 41899089,
+    "mask_bytes": 4211084
+  },
+  {
+    "sample_id": "00010",
+    "image_filename": "00010.tif",
+    "mask_filename": "00010.tif",
+    "image_path": "data/zenodo_validation/images/00010.tif",
+    "mask_path": "data/zenodo_validation/masks/00010.tif",
+    "image_bytes": 41911474,
+    "mask_bytes": 4211084
+  },
+  {
+    "sample_id": "00203",
+    "image_filename": "00203.tif",
+    "mask_filename": "00203.tif",
+    "image_path": "data/zenodo_validation/images/00203.tif",
+    "mask_path": "data/zenodo_validation/masks/00203.tif",
+    "image_bytes": 42827895,
+    "mask_bytes": 4211084
+  }
+]

@@ -6,15 +6,32 @@
     "highest_confidence": 0.98,
     "total_estimated_area_km2": 1.2124,
     "total_estimated_area_m2": 1212451.35,
-    "primary_centroid": {
-      "lat": 55.242013,
-      "lon": 4.052614
-    },
+    "centroid_lat": 55.242013,
+    "centroid_lon": 4.052614,
     "primary_suspect_name": "NORDIC TITAN",
     "primary_suspect_score": 96.8,
+    "metrics": {
+      "iou": 0.5937,
+      "dice": 0.7451,
+      "precision": 0.613,
+      "recall": 0.9497
+    },
+    "ground_truth_metrics": {
+      "iou": 0.5937,
+      "dice": 0.7451,
+      "precision": 0.613,
+      "recall": 0.9497
+    },
+    "pixels": {
+      "true_positive": 13808,
+      "predicted": 22525,
+      "ground_truth": 14539
+    },
     "mask_url": "samples/00000/mask.png",
     "overlay_url": "samples/00000/overlay.png",
     "sar_url": "samples/00000/preprocessed.png",
+    "ground_truth_url": "samples/00000/ground_truth.png",
+    "comparison_url": "samples/00000/gt_vs_pred_comparison.png",
     "geojson_url": "samples/00000/spill.geojson",
     "final_spill_data_url": "samples/00000/final_spill_data.json"
   },
@@ -25,17 +42,70 @@
     "highest_confidence": 0.98,
     "total_estimated_area_km2": 3.6207,
     "total_estimated_area_m2": 3620978.52,
-    "primary_centroid": {
-      "lat": 55.433853,
-      "lon": 5.985377
-    },
+    "centroid_lat": 55.433853,
+    "centroid_lon": 5.985377,
     "primary_suspect_name": "NORDIC TITAN",
     "primary_suspect_score": 88.8,
+    "metrics": {
+      "iou": 0.2374,
+      "dice": 0.3838,
+      "precision": 0.2374,
+      "recall": 1.0
+    },
+    "ground_truth_metrics": {
+      "iou": 0.2374,
+      "dice": 0.3838,
+      "precision": 0.2374,
+      "recall": 1.0
+    },
+    "pixels": {
+      "true_positive": 16314,
+      "predicted": 68706,
+      "ground_truth": 16314
+    },
     "mask_url": "samples/00002/mask.png",
     "overlay_url": "samples/00002/overlay.png",
     "sar_url": "samples/00002/preprocessed.png",
+    "ground_truth_url": "samples/00002/ground_truth.png",
+    "comparison_url": "samples/00002/gt_vs_pred_comparison.png",
     "geojson_url": "samples/00002/spill.geojson",
     "final_spill_data_url": "samples/00002/final_spill_data.json"
+  },
+  {
+    "name": "00003.tif",
+    "id": "00003",
+    "detected_regions_count": 36,
+    "highest_confidence": 0.98,
+    "total_estimated_area_km2": 3.2666,
+    "total_estimated_area_m2": 3266805.01,
+    "centroid_lat": 55.283881,
+    "centroid_lon": 5.893489,
+    "primary_suspect_name": "NORDIC TITAN",
+    "primary_suspect_score": 88.9,
+    "metrics": {
+      "iou": 0.3151,
+      "dice": 0.4792,
+      "precision": 0.3485,
+      "recall": 0.7663
+    },
+    "ground_truth_metrics": {
+      "iou": 0.3151,
+      "dice": 0.4792,
+      "precision": 0.3485,
+      "recall": 0.7663
+    },
+    "pixels": {
+      "true_positive": 18998,
+      "predicted": 54507,
+      "ground_truth": 24791
+    },
+    "mask_url": "samples/00003/mask.png",
+    "overlay_url": "samples/00003/overlay.png",
+    "sar_url": "samples/00003/preprocessed.png",
+    "ground_truth_url": "samples/00003/ground_truth.png",
+    "comparison_url": "samples/00003/gt_vs_pred_comparison.png",
+    "geojson_url": "samples/00003/spill.geojson",
+    "final_spill_data_url": "samples/00003/final_spill_data.json"
   },
   {
     "name": "00004.tif",
@@ -44,15 +114,32 @@
     "highest_confidence": 0.98,
     "total_estimated_area_km2": 3.4186,
     "total_estimated_area_m2": 3418497.35,
-    "primary_centroid": {
-      "lat": 55.214088,
-      "lon": 5.877567
-    },
+    "centroid_lat": 55.214088,
+    "centroid_lon": 5.877567,
     "primary_suspect_name": "NORDIC TITAN",
     "primary_suspect_score": 96.8,
+    "metrics": {
+      "iou": 0.5724,
+      "dice": 0.7281,
+      "precision": 0.6391,
+      "recall": 0.8458
+    },
+    "ground_truth_metrics": {
+      "iou": 0.5724,
+      "dice": 0.7281,
+      "precision": 0.6391,
+      "recall": 0.8458
+    },
+    "pixels": {
+      "true_positive": 37258,
+      "predicted": 58297,
+      "ground_truth": 44049
+    },
     "mask_url": "samples/00004/mask.png",
     "overlay_url": "samples/00004/overlay.png",
     "sar_url": "samples/00004/preprocessed.png",
+    "ground_truth_url": "samples/00004/ground_truth.png",
+    "comparison_url": "samples/00004/gt_vs_pred_comparison.png",
     "geojson_url": "samples/00004/spill.geojson",
     "final_spill_data_url": "samples/00004/final_spill_data.json"
   },
@@ -63,15 +150,32 @@
     "highest_confidence": 0.98,
     "total_estimated_area_km2": 4.2359,
     "total_estimated_area_m2": 4235951.86,
-    "primary_centroid": {
-      "lat": 55.065303,
-      "lon": 5.744155
-    },
+    "centroid_lat": 55.065303,
+    "centroid_lon": 5.744155,
     "primary_suspect_name": "NORDIC TITAN",
     "primary_suspect_score": 96.8,
+    "metrics": {
+      "iou": 0.7234,
+      "dice": 0.8395,
+      "precision": 0.9624,
+      "recall": 0.7444
+    },
+    "ground_truth_metrics": {
+      "iou": 0.7234,
+      "dice": 0.8395,
+      "precision": 0.9624,
+      "recall": 0.7444
+    },
+    "pixels": {
+      "true_positive": 66533,
+      "predicted": 69132,
+      "ground_truth": 89378
+    },
     "mask_url": "samples/00006/mask.png",
     "overlay_url": "samples/00006/overlay.png",
     "sar_url": "samples/00006/preprocessed.png",
+    "ground_truth_url": "samples/00006/ground_truth.png",
+    "comparison_url": "samples/00006/gt_vs_pred_comparison.png",
     "geojson_url": "samples/00006/spill.geojson",
     "final_spill_data_url": "samples/00006/final_spill_data.json"
   },
@@ -82,15 +186,32 @@
     "highest_confidence": 0.98,
     "total_estimated_area_km2": 5.0916,
     "total_estimated_area_m2": 5091598.47,
-    "primary_centroid": {
-      "lat": 32.163714,
-      "lon": 30.676187
-    },
+    "centroid_lat": 32.163714,
+    "centroid_lon": 30.676187,
     "primary_suspect_name": "NORDIC TITAN",
     "primary_suspect_score": 96.9,
+    "metrics": {
+      "iou": 0.7958,
+      "dice": 0.8863,
+      "precision": 0.9462,
+      "recall": 0.8335
+    },
+    "ground_truth_metrics": {
+      "iou": 0.7958,
+      "dice": 0.8863,
+      "precision": 0.9462,
+      "recall": 0.8335
+    },
+    "pixels": {
+      "true_positive": 58992,
+      "predicted": 62345,
+      "ground_truth": 70772
+    },
     "mask_url": "samples/00007/mask.png",
     "overlay_url": "samples/00007/overlay.png",
     "sar_url": "samples/00007/preprocessed.png",
+    "ground_truth_url": "samples/00007/ground_truth.png",
+    "comparison_url": "samples/00007/gt_vs_pred_comparison.png",
     "geojson_url": "samples/00007/spill.geojson",
     "final_spill_data_url": "samples/00007/final_spill_data.json"
   },
@@ -101,16 +222,141 @@
     "highest_confidence": 0.8064,
     "total_estimated_area_km2": 6.6183,
     "total_estimated_area_m2": 6618277.37,
-    "primary_centroid": {
-      "lat": 32.132177,
-      "lon": 30.651698
-    },
+    "centroid_lat": 32.132177,
+    "centroid_lon": 30.651698,
     "primary_suspect_name": "NORDIC TITAN",
     "primary_suspect_score": 96.9,
+    "metrics": {
+      "iou": 0.7795,
+      "dice": 0.8761,
+      "precision": 0.9798,
+      "recall": 0.7922
+    },
+    "ground_truth_metrics": {
+      "iou": 0.7795,
+      "dice": 0.8761,
+      "precision": 0.9798,
+      "recall": 0.7922
+    },
+    "pixels": {
+      "true_positive": 79653,
+      "predicted": 81293,
+      "ground_truth": 100549
+    },
     "mask_url": "samples/00008/mask.png",
     "overlay_url": "samples/00008/overlay.png",
     "sar_url": "samples/00008/preprocessed.png",
+    "ground_truth_url": "samples/00008/ground_truth.png",
+    "comparison_url": "samples/00008/gt_vs_pred_comparison.png",
     "geojson_url": "samples/00008/spill.geojson",
     "final_spill_data_url": "samples/00008/final_spill_data.json"
+  },
+  {
+    "name": "00009.tif",
+    "id": "00009",
+    "detected_regions_count": 21,
+    "highest_confidence": 0.98,
+    "total_estimated_area_km2": 3.467,
+    "total_estimated_area_m2": 3467123.55,
+    "centroid_lat": 32.514656,
+    "centroid_lon": 29.301992,
+    "primary_suspect_name": "NORDIC TITAN",
+    "primary_suspect_score": 96.9,
+    "metrics": {
+      "iou": 0.6475,
+      "dice": 0.786,
+      "precision": 0.7915,
+      "recall": 0.7807
+    },
+    "ground_truth_metrics": {
+      "iou": 0.6475,
+      "dice": 0.786,
+      "precision": 0.7915,
+      "recall": 0.7807
+    },
+    "pixels": {
+      "true_positive": 35123,
+      "predicted": 44377,
+      "ground_truth": 44991
+    },
+    "mask_url": "samples/00009/mask.png",
+    "overlay_url": "samples/00009/overlay.png",
+    "sar_url": "samples/00009/preprocessed.png",
+    "ground_truth_url": "samples/00009/ground_truth.png",
+    "comparison_url": "samples/00009/gt_vs_pred_comparison.png",
+    "geojson_url": "samples/00009/spill.geojson",
+    "final_spill_data_url": "samples/00009/final_spill_data.json"
+  },
+  {
+    "name": "00010.tif",
+    "id": "00010",
+    "detected_regions_count": 51,
+    "highest_confidence": 0.98,
+    "total_estimated_area_km2": 4.9252,
+    "total_estimated_area_m2": 4925151.36,
+    "centroid_lat": 32.540144,
+    "centroid_lon": 29.281186,
+    "primary_suspect_name": "NORDIC TITAN",
+    "primary_suspect_score": 96.9,
+    "metrics": {
+      "iou": 0.3741,
+      "dice": 0.5445,
+      "precision": 0.543,
+      "recall": 0.5461
+    },
+    "ground_truth_metrics": {
+      "iou": 0.3741,
+      "dice": 0.5445,
+      "precision": 0.543,
+      "recall": 0.5461
+    },
+    "pixels": {
+      "true_positive": 34141,
+      "predicted": 62874,
+      "ground_truth": 62520
+    },
+    "mask_url": "samples/00010/mask.png",
+    "overlay_url": "samples/00010/overlay.png",
+    "sar_url": "samples/00010/preprocessed.png",
+    "ground_truth_url": "samples/00010/ground_truth.png",
+    "comparison_url": "samples/00010/gt_vs_pred_comparison.png",
+    "geojson_url": "samples/00010/spill.geojson",
+    "final_spill_data_url": "samples/00010/final_spill_data.json"
+  },
+  {
+    "name": "00203.tif",
+    "id": "00203",
+    "detected_regions_count": 14,
+    "highest_confidence": 0.98,
+    "total_estimated_area_km2": 0.8373,
+    "total_estimated_area_m2": 837322.01,
+    "centroid_lat": 33.391822,
+    "centroid_lon": 30.119686,
+    "primary_suspect_name": "NORDIC TITAN",
+    "primary_suspect_score": 96.9,
+    "metrics": {
+      "iou": 0.4428,
+      "dice": 0.6138,
+      "precision": 0.5265,
+      "recall": 0.7359
+    },
+    "ground_truth_metrics": {
+      "iou": 0.4428,
+      "dice": 0.6138,
+      "precision": 0.5265,
+      "recall": 0.7359
+    },
+    "pixels": {
+      "true_positive": 5942,
+      "predicted": 11286,
+      "ground_truth": 8075
+    },
+    "mask_url": "samples/00203/mask.png",
+    "overlay_url": "samples/00203/overlay.png",
+    "sar_url": "samples/00203/preprocessed.png",
+    "ground_truth_url": "samples/00203/ground_truth.png",
+    "comparison_url": "samples/00203/gt_vs_pred_comparison.png",
+    "geojson_url": "samples/00203/spill.geojson",
+    "final_spill_data_url": "samples/00203/final_spill_data.json"
   }
 ]
