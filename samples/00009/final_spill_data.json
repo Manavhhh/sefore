@@ -1,7 +1,7 @@
 {
   "version": "2.0-SIH26143",
   "module": "Sefore Satellite SAR & AIS Maritime Identification Engine",
-  "generated_at": "2026-09-07T04:05:39.416907+00:00",
+  "generated_at": "2026-09-07T17:11:04.313325+00:00",
   "scene_metadata": {
     "source_image": "00009.tif",
     "sensor": "Sentinel-1 Synthetic Aperture Radar (C-band)",
@@ -18207,66 +18207,126 @@
   "vessel_identification_analytics": {
     "total_vessels_tracked": 6,
     "prime_suspect_vessel": {
-      "mmsi": "244670112",
-      "imo": "9384912",
-      "name": "NORDIC TITAN",
-      "callsign": "PCDE",
-      "flag": "Netherlands",
-      "flag_code": "NL",
-      "vessel_type": "Crude Oil Tanker",
-      "speed_knots": 12.4,
-      "heading_deg": 48,
-      "length_m": 249,
-      "dwt": 115000,
+      "mmsi": "240893000",
+      "imo": "9293450",
+      "name": "AEGEAN SEAWAYS",
+      "callsign": "SVAD",
+      "flag": "Greece",
+      "flag_code": "GR",
+      "vessel_type": "Product Tanker",
+      "speed_knots": 13.8,
+      "heading_deg": 135,
+      "length_m": 183,
+      "dwt": 51200,
       "suspect_score": 96.9,
       "risk_tier": "CRITICAL SUSPECT",
-      "distance_to_centroid_km": 0.623,
+      "distance_to_centroid_km": 0.674,
       "distance_to_edge_km": 0.0,
       "cpa_coordinates": {
-        "lat": 32.519378,
-        "lon": 29.298405
+        "lat": 32.519608,
+        "lon": 29.306151
       },
-      "cpa_timestamp": "2026-03-14T17:05:00Z",
-      "time_delta_minutes": -25.0,
+      "cpa_timestamp": "2026-03-14T17:06:00Z",
+      "time_delta_minutes": -24.0,
       "trajectory": [
         [
-          29.11959,
-          32.383417
+          29.136648,
+          32.66107
         ],
         [
-          29.179365,
-          32.428898
+          29.193544,
+          32.61383
         ],
         [
-          29.239033,
-          32.474273
+          29.250332,
+          32.566483
         ],
         [
-          29.298515,
-          32.519461
+          29.306935,
+          32.51895
         ],
         [
-          29.357783,
-          32.564436
+          29.363323,
+          32.471202
         ],
         [
-          29.416865,
-          32.609225
+          29.419526,
+          32.423269
         ],
         [
-          29.47584,
-          32.653906
+          29.475622,
+          32.375229
         ]
       ],
       "intersects_spill": true,
       "scoring_breakdown": {
-        "proximity_score": 0.894,
+        "proximity_score": 0.886,
         "temporal_score": 0.993,
-        "type_weight": 1.0,
+        "type_weight": 0.923,
         "intersection_flag": true
       }
     },
     "ranked_suspect_leaderboard": [
+      {
+        "mmsi": "240893000",
+        "imo": "9293450",
+        "name": "AEGEAN SEAWAYS",
+        "callsign": "SVAD",
+        "flag": "Greece",
+        "flag_code": "GR",
+        "vessel_type": "Product Tanker",
+        "speed_knots": 13.8,
+        "heading_deg": 135,
+        "length_m": 183,
+        "dwt": 51200,
+        "suspect_score": 96.9,
+        "risk_tier": "CRITICAL SUSPECT",
+        "distance_to_centroid_km": 0.674,
+        "distance_to_edge_km": 0.0,
+        "cpa_coordinates": {
+          "lat": 32.519608,
+          "lon": 29.306151
+        },
+        "cpa_timestamp": "2026-03-14T17:06:00Z",
+        "time_delta_minutes": -24.0,
+        "trajectory": [
+          [
+            29.136648,
+            32.66107
+          ],
+          [
+            29.193544,
+            32.61383
+          ],
+          [
+            29.250332,
+            32.566483
+          ],
+          [
+            29.306935,
+            32.51895
+          ],
+          [
+            29.363323,
+            32.471202
+          ],
+          [
+            29.419526,
+            32.423269
+          ],
+          [
+            29.475622,
+            32.375229
+          ]
+        ],
+        "intersects_spill": true,
+        "scoring_breakdown": {
+          "proximity_score": 0.886,
+          "temporal_score": 0.993,
+          "type_weight": 0.923,
+          "intersection_flag": true
+        }
+      },
       {
         "mmsi": "244670112",
         "imo": "9384912",
@@ -18279,52 +18339,112 @@
         "heading_deg": 48,
         "length_m": 249,
         "dwt": 115000,
-        "suspect_score": 96.9,
+        "suspect_score": 92.4,
         "risk_tier": "CRITICAL SUSPECT",
-        "distance_to_centroid_km": 0.623,
+        "distance_to_centroid_km": 4.534,
         "distance_to_edge_km": 0.0,
         "cpa_coordinates": {
-          "lat": 32.519378,
-          "lon": 29.298405
+          "lat": 32.480279,
+          "lon": 29.328109
         },
-        "cpa_timestamp": "2026-03-14T17:05:00Z",
-        "time_delta_minutes": -25.0,
+        "cpa_timestamp": "2026-03-14T16:25:00Z",
+        "time_delta_minutes": -65.0,
         "trajectory": [
           [
-            29.11959,
-            32.383417
+            29.155944,
+            32.34937
           ],
           [
-            29.179365,
-            32.428898
+            29.215719,
+            32.394852
           ],
           [
-            29.239033,
-            32.474273
+            29.275387,
+            32.440226
           ],
           [
-            29.298515,
-            32.519461
+            29.334869,
+            32.485415
           ],
           [
-            29.357783,
-            32.564436
+            29.394137,
+            32.530389
           ],
           [
-            29.416865,
-            32.609225
+            29.453219,
+            32.575178
           ],
           [
-            29.47584,
-            32.653906
+            29.512194,
+            32.61986
           ]
         ],
         "intersects_spill": true,
         "scoring_breakdown": {
-          "proximity_score": 0.894,
-          "temporal_score": 0.993,
+          "proximity_score": 0.442,
+          "temporal_score": 0.953,
           "type_weight": 1.0,
           "intersection_flag": true
+        }
+      },
+      {
+        "mmsi": "538008432",
+        "imo": "9614532",
+        "name": "HMC MALAISKA",
+        "callsign": "V7A2941",
+        "flag": "Marshall Islands",
+        "flag_code": "MH",
+        "vessel_type": "Chemical Tanker",
+        "speed_knots": 13.5,
+        "heading_deg": 64,
+        "length_m": 228,
+        "dwt": 74500,
+        "suspect_score": 52.2,
+        "risk_tier": "MODERATE SUSPECT",
+        "distance_to_centroid_km": 9.885,
+        "distance_to_edge_km": 3.291,
+        "cpa_coordinates": {
+          "lat": 32.598853,
+          "lon": 29.267437
+        },
+        "cpa_timestamp": "2026-03-14T18:15:00Z",
+        "time_delta_minutes": 45.0,
+        "trajectory": [
+          [
+            29.040794,
+            32.505177
+          ],
+          [
+            29.113005,
+            32.535112
+          ],
+          [
+            29.185109,
+            32.564939
+          ],
+          [
+            29.257027,
+            32.594581
+          ],
+          [
+            29.32873,
+            32.624008
+          ],
+          [
+            29.400248,
+            32.65325
+          ],
+          [
+            29.471659,
+            32.682384
+          ]
+        ],
+        "intersects_spill": false,
+        "scoring_breakdown": {
+          "proximity_score": 0.169,
+          "temporal_score": 0.977,
+          "type_weight": 0.962,
+          "intersection_flag": false
         }
       },
       {
@@ -18339,111 +18459,51 @@
         "heading_deg": 52,
         "length_m": 183,
         "dwt": 49990,
-        "suspect_score": 92.7,
-        "risk_tier": "CRITICAL SUSPECT",
-        "distance_to_centroid_km": 4.216,
-        "distance_to_edge_km": 0.0,
-        "cpa_coordinates": {
-          "lat": 32.481465,
-          "lon": 29.323878
-        },
-        "cpa_timestamp": "2026-03-14T16:25:00Z",
-        "time_delta_minutes": -65.0,
-        "trajectory": [
-          [
-            29.140659,
-            32.360488
-          ],
-          [
-            29.204019,
-            32.402367
-          ],
-          [
-            29.267271,
-            32.444139
-          ],
-          [
-            29.330338,
-            32.485725
-          ],
-          [
-            29.39319,
-            32.527097
-          ],
-          [
-            29.455857,
-            32.568283
-          ],
-          [
-            29.518417,
-            32.609363
-          ]
-        ],
-        "intersects_spill": true,
-        "scoring_breakdown": {
-          "proximity_score": 0.468,
-          "temporal_score": 0.953,
-          "type_weight": 0.923,
-          "intersection_flag": true
-        }
-      },
-      {
-        "mmsi": "353892000",
-        "imo": "9811000",
-        "name": "MSC AMALIA",
-        "callsign": "3EGH",
-        "flag": "Panama",
-        "flag_code": "PA",
-        "vessel_type": "Container Ship",
-        "speed_knots": 19.2,
-        "heading_deg": 230,
-        "length_m": 399,
-        "dwt": 198000,
-        "suspect_score": 49.2,
+        "suspect_score": 41.6,
         "risk_tier": "MODERATE SUSPECT",
-        "distance_to_centroid_km": 9.58,
-        "distance_to_edge_km": 3.042,
+        "distance_to_centroid_km": 15.627,
+        "distance_to_edge_km": 9.09,
         "cpa_coordinates": {
-          "lat": 32.440589,
-          "lon": 29.354438
+          "lat": 32.391656,
+          "lon": 29.383099
         },
-        "cpa_timestamp": "2026-03-14T18:15:00Z",
-        "time_delta_minutes": 45.0,
+        "cpa_timestamp": "2026-03-14T15:20:00Z",
+        "time_delta_minutes": -130.0,
         "trajectory": [
           [
-            29.550657,
-            32.579202
+            29.214771,
+            32.280497
           ],
           [
-            29.489853,
-            32.536296
+            29.278131,
+            32.322376
           ],
           [
-            29.428941,
-            32.493282
+            29.341383,
+            32.364148
           ],
           [
-            29.367844,
-            32.450082
+            29.40445,
+            32.405735
           ],
           [
-            29.306532,
-            32.406668
+            29.467303,
+            32.447107
           ],
           [
-            29.245035,
-            32.363069
+            29.529969,
+            32.488293
           ],
           [
-            29.18343,
-            32.319362
+            29.592529,
+            32.529372
           ]
         ],
         "intersects_spill": false,
         "scoring_breakdown": {
-          "proximity_score": 0.178,
-          "temporal_score": 0.977,
-          "type_weight": 0.731,
+          "proximity_score": 0.06,
+          "temporal_score": 0.826,
+          "type_weight": 0.923,
           "intersection_flag": false
         }
       },
@@ -18459,176 +18519,116 @@
         "heading_deg": 45,
         "length_m": 160,
         "dwt": 25000,
-        "suspect_score": 42.6,
-        "risk_tier": "MODERATE SUSPECT",
-        "distance_to_centroid_km": 14.97,
-        "distance_to_edge_km": 8.467,
+        "suspect_score": 34.7,
+        "risk_tier": "LOW SUSPECT",
+        "distance_to_centroid_km": 23.075,
+        "distance_to_edge_km": 16.353,
         "cpa_coordinates": {
-          "lat": 32.404857,
-          "lon": 29.394612
+          "lat": 32.68403,
+          "lon": 29.159218
         },
-        "cpa_timestamp": "2026-03-14T15:20:00Z",
-        "time_delta_minutes": -130.0,
+        "cpa_timestamp": "2026-03-14T20:45:35Z",
+        "time_delta_minutes": 195.6,
         "trajectory": [
           [
-            29.24399,
-            32.277726
+            28.960759,
+            32.516562
           ],
           [
-            29.300885,
-            32.325766
+            29.017654,
+            32.564602
           ],
           [
-            29.357674,
-            32.373699
+            29.074443,
+            32.612535
           ],
           [
-            29.414277,
-            32.421446
+            29.131045,
+            32.660282
           ],
           [
-            29.470665,
-            32.468979
+            29.187434,
+            32.707815
           ],
           [
-            29.526868,
-            32.516326
+            29.243637,
+            32.755162
           ],
           [
-            29.582963,
-            32.563567
+            29.299732,
+            32.802402
           ]
         ],
         "intersects_spill": false,
         "scoring_breakdown": {
-          "proximity_score": 0.068,
-          "temporal_score": 0.826,
+          "proximity_score": 0.016,
+          "temporal_score": 0.648,
           "type_weight": 0.962,
           "intersection_flag": false
         }
       },
       {
-        "mmsi": "636018442",
-        "imo": "9312896",
-        "name": "PACIFIC EXPLORER",
-        "callsign": "A8XG",
-        "flag": "Liberia",
-        "flag_code": "LR",
-        "vessel_type": "Bulk Carrier",
-        "speed_knots": 10.5,
-        "heading_deg": 225,
-        "length_m": 225,
-        "dwt": 75000,
-        "suspect_score": 30.0,
+        "mmsi": "353892000",
+        "imo": "9811000",
+        "name": "MSC AMALIA",
+        "callsign": "3EGH",
+        "flag": "Panama",
+        "flag_code": "PA",
+        "vessel_type": "Container Ship",
+        "speed_knots": 19.2,
+        "heading_deg": 230,
+        "length_m": 399,
+        "dwt": 198000,
+        "suspect_score": 18.9,
         "risk_tier": "LOW SUSPECT",
-        "distance_to_centroid_km": 22.664,
-        "distance_to_edge_km": 16.162,
+        "distance_to_centroid_km": 30.826,
+        "distance_to_edge_km": 24.063,
         "cpa_coordinates": {
-          "lat": 32.348438,
-          "lon": 29.442207
+          "lat": 32.753194,
+          "lon": 29.133335
         },
-        "cpa_timestamp": "2026-03-14T20:53:08Z",
-        "time_delta_minutes": 203.1,
+        "cpa_timestamp": "2026-03-14T15:47:20Z",
+        "time_delta_minutes": -102.7,
         "trajectory": [
           [
-            29.640212,
-            32.515291
+            29.276755,
+            32.854461
           ],
           [
-            29.584117,
-            32.468051
+            29.21595,
+            32.811554
           ],
           [
-            29.527914,
-            32.420704
+            29.155039,
+            32.76854
           ],
           [
-            29.471526,
-            32.373171
+            29.093941,
+            32.725341
           ],
           [
-            29.414923,
-            32.325423
+            29.03263,
+            32.681927
           ],
           [
-            29.358134,
-            32.27749
+            28.971132,
+            32.638327
           ],
           [
-            29.301239,
-            32.22945
+            28.909528,
+            32.59462
           ]
         ],
         "intersects_spill": false,
         "scoring_breakdown": {
-          "proximity_score": 0.017,
-          "temporal_score": 0.626,
-          "type_weight": 0.692,
-          "intersection_flag": false
-        }
-      },
-      {
-        "mmsi": "219001452",
-        "imo": "8920194",
-        "name": "HAVFROST",
-        "callsign": "OXYA",
-        "flag": "Denmark",
-        "flag_code": "DK",
-        "vessel_type": "Fishing Vessel",
-        "speed_knots": 7.2,
-        "heading_deg": 120,
-        "length_m": 42,
-        "dwt": 850,
-        "suspect_score": 17.8,
-        "risk_tier": "LOW SUSPECT",
-        "distance_to_centroid_km": 28.66,
-        "distance_to_edge_km": 26.098,
-        "cpa_coordinates": {
-          "lat": 32.275949,
-          "lon": 29.18523
-        },
-        "cpa_timestamp": "2026-03-14T16:33:44Z",
-        "time_delta_minutes": -56.3,
-        "trajectory": [
-          [
-            28.942077,
-            32.393219
-          ],
-          [
-            29.01167,
-            32.359933
-          ],
-          [
-            29.081155,
-            32.326539
-          ],
-          [
-            29.150455,
-            32.292959
-          ],
-          [
-            29.219541,
-            32.259166
-          ],
-          [
-            29.288441,
-            32.225186
-          ],
-          [
-            29.357233,
-            32.191099
-          ]
-        ],
-        "intersects_spill": false,
-        "scoring_breakdown": {
-          "proximity_score": 0.006,
-          "temporal_score": 0.965,
-          "type_weight": 0.423,
+          "proximity_score": 0.004,
+          "temporal_score": 0.887,
+          "type_weight": 0.731,
           "intersection_flag": false
         }
       }
     ],
-    "enforcement_recommendation": "HIGH ALERT: Vessel NORDIC TITAN (MMSI: 244670112, Flag: Netherlands, Type: Crude Oil Tanker) passed within 0.623 km of the slick centroid at 2026-03-14T17:05:00Z. Suspect Index: 96.9%. Immediate inspection recommended via Port State Control (PSC) upon next harbor arrival.",
+    "enforcement_recommendation": "HIGH ALERT: Vessel AEGEAN SEAWAYS (MMSI: 240893000, Flag: Greece, Type: Product Tanker) passed within 0.674 km of the slick centroid at 2026-03-14T17:06:00Z. Suspect Index: 96.9%. Immediate inspection recommended via Port State Control (PSC) upon next harbor arrival.",
     "vessel_trajectories_geojson": {
       "type": "FeatureCollection",
       "features": [
@@ -18638,32 +18638,83 @@
             "type": "LineString",
             "coordinates": [
               [
-                29.11959,
-                32.383417
+                29.136648,
+                32.66107
               ],
               [
-                29.179365,
-                32.428898
+                29.193544,
+                32.61383
               ],
               [
-                29.239033,
-                32.474273
+                29.250332,
+                32.566483
               ],
               [
-                29.298515,
-                32.519461
+                29.306935,
+                32.51895
               ],
               [
-                29.357783,
-                32.564436
+                29.363323,
+                32.471202
               ],
               [
-                29.416865,
-                32.609225
+                29.419526,
+                32.423269
               ],
               [
-                29.47584,
-                32.653906
+                29.475622,
+                32.375229
+              ]
+            ]
+          },
+          "properties": {
+            "mmsi": "240893000",
+            "name": "AEGEAN SEAWAYS",
+            "vessel_type": "Product Tanker",
+            "flag": "Greece",
+            "flag_code": "GR",
+            "suspect_score": 96.9,
+            "risk_tier": "CRITICAL SUSPECT",
+            "distance_to_centroid_km": 0.674,
+            "cpa_lat": 32.519608,
+            "cpa_lon": 29.306151,
+            "cpa_timestamp": "2026-03-14T17:06:00Z",
+            "speed_knots": 13.8,
+            "heading_deg": 135
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                29.155944,
+                32.34937
+              ],
+              [
+                29.215719,
+                32.394852
+              ],
+              [
+                29.275387,
+                32.440226
+              ],
+              [
+                29.334869,
+                32.485415
+              ],
+              [
+                29.394137,
+                32.530389
+              ],
+              [
+                29.453219,
+                32.575178
+              ],
+              [
+                29.512194,
+                32.61986
               ]
             ]
           },
@@ -18673,12 +18724,12 @@
             "vessel_type": "Crude Oil Tanker",
             "flag": "Netherlands",
             "flag_code": "NL",
-            "suspect_score": 96.9,
+            "suspect_score": 92.4,
             "risk_tier": "CRITICAL SUSPECT",
-            "distance_to_centroid_km": 0.623,
-            "cpa_lat": 32.519378,
-            "cpa_lon": 29.298405,
-            "cpa_timestamp": "2026-03-14T17:05:00Z",
+            "distance_to_centroid_km": 4.534,
+            "cpa_lat": 32.480279,
+            "cpa_lon": 29.328109,
+            "cpa_timestamp": "2026-03-14T16:25:00Z",
             "speed_knots": 12.4,
             "heading_deg": 48
           }
@@ -18689,32 +18740,83 @@
             "type": "LineString",
             "coordinates": [
               [
-                29.140659,
-                32.360488
+                29.040794,
+                32.505177
               ],
               [
-                29.204019,
-                32.402367
+                29.113005,
+                32.535112
               ],
               [
-                29.267271,
-                32.444139
+                29.185109,
+                32.564939
               ],
               [
-                29.330338,
-                32.485725
+                29.257027,
+                32.594581
               ],
               [
-                29.39319,
-                32.527097
+                29.32873,
+                32.624008
               ],
               [
-                29.455857,
-                32.568283
+                29.400248,
+                32.65325
               ],
               [
-                29.518417,
-                32.609363
+                29.471659,
+                32.682384
+              ]
+            ]
+          },
+          "properties": {
+            "mmsi": "538008432",
+            "name": "HMC MALAISKA",
+            "vessel_type": "Chemical Tanker",
+            "flag": "Marshall Islands",
+            "flag_code": "MH",
+            "suspect_score": 52.2,
+            "risk_tier": "MODERATE SUSPECT",
+            "distance_to_centroid_km": 9.885,
+            "cpa_lat": 32.598853,
+            "cpa_lon": 29.267437,
+            "cpa_timestamp": "2026-03-14T18:15:00Z",
+            "speed_knots": 13.5,
+            "heading_deg": 64
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                29.214771,
+                32.280497
+              ],
+              [
+                29.278131,
+                32.322376
+              ],
+              [
+                29.341383,
+                32.364148
+              ],
+              [
+                29.40445,
+                32.405735
+              ],
+              [
+                29.467303,
+                32.447107
+              ],
+              [
+                29.529969,
+                32.488293
+              ],
+              [
+                29.592529,
+                32.529372
               ]
             ]
           },
@@ -18724,12 +18826,12 @@
             "vessel_type": "Product Tanker",
             "flag": "Germany",
             "flag_code": "DE",
-            "suspect_score": 92.7,
-            "risk_tier": "CRITICAL SUSPECT",
-            "distance_to_centroid_km": 4.216,
-            "cpa_lat": 32.481465,
-            "cpa_lon": 29.323878,
-            "cpa_timestamp": "2026-03-14T16:25:00Z",
+            "suspect_score": 41.6,
+            "risk_tier": "MODERATE SUSPECT",
+            "distance_to_centroid_km": 15.627,
+            "cpa_lat": 32.391656,
+            "cpa_lon": 29.383099,
+            "cpa_timestamp": "2026-03-14T15:20:00Z",
             "speed_knots": 14.1,
             "heading_deg": 52
           }
@@ -18740,83 +18842,32 @@
             "type": "LineString",
             "coordinates": [
               [
-                29.550657,
-                32.579202
+                28.960759,
+                32.516562
               ],
               [
-                29.489853,
-                32.536296
+                29.017654,
+                32.564602
               ],
               [
-                29.428941,
-                32.493282
+                29.074443,
+                32.612535
               ],
               [
-                29.367844,
-                32.450082
+                29.131045,
+                32.660282
               ],
               [
-                29.306532,
-                32.406668
+                29.187434,
+                32.707815
               ],
               [
-                29.245035,
-                32.363069
+                29.243637,
+                32.755162
               ],
               [
-                29.18343,
-                32.319362
-              ]
-            ]
-          },
-          "properties": {
-            "mmsi": "353892000",
-            "name": "MSC AMALIA",
-            "vessel_type": "Container Ship",
-            "flag": "Panama",
-            "flag_code": "PA",
-            "suspect_score": 49.2,
-            "risk_tier": "MODERATE SUSPECT",
-            "distance_to_centroid_km": 9.58,
-            "cpa_lat": 32.440589,
-            "cpa_lon": 29.354438,
-            "cpa_timestamp": "2026-03-14T18:15:00Z",
-            "speed_knots": 19.2,
-            "heading_deg": 230
-          }
-        },
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                29.24399,
-                32.277726
-              ],
-              [
-                29.300885,
-                32.325766
-              ],
-              [
-                29.357674,
-                32.373699
-              ],
-              [
-                29.414277,
-                32.421446
-              ],
-              [
-                29.470665,
-                32.468979
-              ],
-              [
-                29.526868,
-                32.516326
-              ],
-              [
-                29.582963,
-                32.563567
+                29.299732,
+                32.802402
               ]
             ]
           },
@@ -18826,12 +18877,12 @@
             "vessel_type": "Chemical Tanker",
             "flag": "Norway",
             "flag_code": "NO",
-            "suspect_score": 42.6,
-            "risk_tier": "MODERATE SUSPECT",
-            "distance_to_centroid_km": 14.97,
-            "cpa_lat": 32.404857,
-            "cpa_lon": 29.394612,
-            "cpa_timestamp": "2026-03-14T15:20:00Z",
+            "suspect_score": 34.7,
+            "risk_tier": "LOW SUSPECT",
+            "distance_to_centroid_km": 23.075,
+            "cpa_lat": 32.68403,
+            "cpa_lon": 29.159218,
+            "cpa_timestamp": "2026-03-14T20:45:35Z",
             "speed_knots": 11.8,
             "heading_deg": 45
           }
@@ -18842,100 +18893,49 @@
             "type": "LineString",
             "coordinates": [
               [
-                29.640212,
-                32.515291
+                29.276755,
+                32.854461
               ],
               [
-                29.584117,
-                32.468051
+                29.21595,
+                32.811554
               ],
               [
-                29.527914,
-                32.420704
+                29.155039,
+                32.76854
               ],
               [
-                29.471526,
-                32.373171
+                29.093941,
+                32.725341
               ],
               [
-                29.414923,
-                32.325423
+                29.03263,
+                32.681927
               ],
               [
-                29.358134,
-                32.27749
+                28.971132,
+                32.638327
               ],
               [
-                29.301239,
-                32.22945
+                28.909528,
+                32.59462
               ]
             ]
           },
           "properties": {
-            "mmsi": "636018442",
-            "name": "PACIFIC EXPLORER",
-            "vessel_type": "Bulk Carrier",
-            "flag": "Liberia",
-            "flag_code": "LR",
-            "suspect_score": 30.0,
+            "mmsi": "353892000",
+            "name": "MSC AMALIA",
+            "vessel_type": "Container Ship",
+            "flag": "Panama",
+            "flag_code": "PA",
+            "suspect_score": 18.9,
             "risk_tier": "LOW SUSPECT",
-            "distance_to_centroid_km": 22.664,
-            "cpa_lat": 32.348438,
-            "cpa_lon": 29.442207,
-            "cpa_timestamp": "2026-03-14T20:53:08Z",
-            "speed_knots": 10.5,
-            "heading_deg": 225
-          }
-        },
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                28.942077,
-                32.393219
-              ],
-              [
-                29.01167,
-                32.359933
-              ],
-              [
-                29.081155,
-                32.326539
-              ],
-              [
-                29.150455,
-                32.292959
-              ],
-              [
-                29.219541,
-                32.259166
-              ],
-              [
-                29.288441,
-                32.225186
-              ],
-              [
-                29.357233,
-                32.191099
-              ]
-            ]
-          },
-          "properties": {
-            "mmsi": "219001452",
-            "name": "HAVFROST",
-            "vessel_type": "Fishing Vessel",
-            "flag": "Denmark",
-            "flag_code": "DK",
-            "suspect_score": 17.8,
-            "risk_tier": "LOW SUSPECT",
-            "distance_to_centroid_km": 28.66,
-            "cpa_lat": 32.275949,
-            "cpa_lon": 29.18523,
-            "cpa_timestamp": "2026-03-14T16:33:44Z",
-            "speed_knots": 7.2,
-            "heading_deg": 120
+            "distance_to_centroid_km": 30.826,
+            "cpa_lat": 32.753194,
+            "cpa_lon": 29.133335,
+            "cpa_timestamp": "2026-03-14T15:47:20Z",
+            "speed_knots": 19.2,
+            "heading_deg": 230
           }
         }
       ]
@@ -18949,8 +18949,8 @@
             "type": "LineString",
             "coordinates": [
               [
-                29.298405,
-                32.519378
+                29.306151,
+                32.519608
               ],
               [
                 29.301992,
@@ -18959,9 +18959,9 @@
             ]
           },
           "properties": {
-            "vessel_name": "NORDIC TITAN",
-            "mmsi": "244670112",
-            "distance_km": 0.623,
+            "vessel_name": "AEGEAN SEAWAYS",
+            "mmsi": "240893000",
+            "distance_km": 0.674,
             "suspect_score": 96.9,
             "is_primary_suspect": true
           }
@@ -18972,8 +18972,54 @@
             "type": "LineString",
             "coordinates": [
               [
-                29.323878,
-                32.481465
+                29.328109,
+                32.480279
+              ],
+              [
+                29.301992,
+                32.514656
+              ]
+            ]
+          },
+          "properties": {
+            "vessel_name": "NORDIC TITAN",
+            "mmsi": "244670112",
+            "distance_km": 4.534,
+            "suspect_score": 92.4,
+            "is_primary_suspect": false
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                29.267437,
+                32.598853
+              ],
+              [
+                29.301992,
+                32.514656
+              ]
+            ]
+          },
+          "properties": {
+            "vessel_name": "HMC MALAISKA",
+            "mmsi": "538008432",
+            "distance_km": 9.885,
+            "suspect_score": 52.2,
+            "is_primary_suspect": false
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                29.383099,
+                32.391656
               ],
               [
                 29.301992,
@@ -18984,8 +19030,8 @@
           "properties": {
             "vessel_name": "BALTIC ADMIRAL",
             "mmsi": "211543880",
-            "distance_km": 4.216,
-            "suspect_score": 92.7,
+            "distance_km": 15.627,
+            "suspect_score": 41.6,
             "is_primary_suspect": false
           }
         },
@@ -18995,31 +19041,8 @@
             "type": "LineString",
             "coordinates": [
               [
-                29.354438,
-                32.440589
-              ],
-              [
-                29.301992,
-                32.514656
-              ]
-            ]
-          },
-          "properties": {
-            "vessel_name": "MSC AMALIA",
-            "mmsi": "353892000",
-            "distance_km": 9.58,
-            "suspect_score": 49.2,
-            "is_primary_suspect": false
-          }
-        },
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                29.394612,
-                32.404857
+                29.159218,
+                32.68403
               ],
               [
                 29.301992,
@@ -19030,8 +19053,8 @@
           "properties": {
             "vessel_name": "STENA CARRIER",
             "mmsi": "257019230",
-            "distance_km": 14.97,
-            "suspect_score": 42.6,
+            "distance_km": 23.075,
+            "suspect_score": 34.7,
             "is_primary_suspect": false
           }
         },
@@ -19041,8 +19064,8 @@
             "type": "LineString",
             "coordinates": [
               [
-                29.442207,
-                32.348438
+                29.133335,
+                32.753194
               ],
               [
                 29.301992,
@@ -19051,33 +19074,10 @@
             ]
           },
           "properties": {
-            "vessel_name": "PACIFIC EXPLORER",
-            "mmsi": "636018442",
-            "distance_km": 22.664,
-            "suspect_score": 30.0,
-            "is_primary_suspect": false
-          }
-        },
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [
-                29.18523,
-                32.275949
-              ],
-              [
-                29.301992,
-                32.514656
-              ]
-            ]
-          },
-          "properties": {
-            "vessel_name": "HAVFROST",
-            "mmsi": "219001452",
-            "distance_km": 28.66,
-            "suspect_score": 17.8,
+            "vessel_name": "MSC AMALIA",
+            "mmsi": "353892000",
+            "distance_km": 30.826,
+            "suspect_score": 18.9,
             "is_primary_suspect": false
           }
         }

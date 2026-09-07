@@ -144,10 +144,12 @@ class OilSpillPipeline:
         highest_conf = max(confidences) if confidences else 0.0
 
         # 9. AIS Vessel Trajectory Correlation & Suspect Scoring
+        sample_id = os.path.splitext(os.path.basename(input_path))[0]
         vessel_analytics = self.vessel_identifier.correlate_spill_with_vessels(
             spill_geojson=geojson_data,
             scene_timestamp=scene_timestamp,
             vessel_data=vessel_data,
+            sample_id=sample_id,
         )
 
         summary = {

@@ -148,16 +148,184 @@ class VesselIdentifier:
 
         return final_score_pct, tier, breakdown
 
+    FLEET_CATALOG = {
+        "NORDIC_TITAN": {
+            "mmsi": "244670112",
+            "imo": "9384912",
+            "name": "NORDIC TITAN",
+            "callsign": "PCDE",
+            "flag": "Netherlands",
+            "flag_code": "NL",
+            "vessel_type": "Crude Oil Tanker",
+            "length_m": 249,
+            "beam_m": 44,
+            "draught_m": 14.8,
+            "dwt": 115000,
+            "speed_knots": 12.4,
+            "heading_deg": 48,
+        },
+        "HMC_MALAISKA": {
+            "mmsi": "538008432",
+            "imo": "9614532",
+            "name": "HMC MALAISKA",
+            "callsign": "V7A2941",
+            "flag": "Marshall Islands",
+            "flag_code": "MH",
+            "vessel_type": "Chemical Tanker",
+            "length_m": 228,
+            "beam_m": 32,
+            "draught_m": 12.2,
+            "dwt": 74500,
+            "speed_knots": 13.5,
+            "heading_deg": 64,
+        },
+        "BALTIC_ADMIRAL": {
+            "mmsi": "211543880",
+            "imo": "9421805",
+            "name": "BALTIC ADMIRAL",
+            "callsign": "DLBZ",
+            "flag": "Germany",
+            "flag_code": "DE",
+            "vessel_type": "Product Tanker",
+            "length_m": 183,
+            "beam_m": 32,
+            "draught_m": 11.2,
+            "dwt": 49990,
+            "speed_knots": 14.1,
+            "heading_deg": 52,
+        },
+        "STENA_CARRIER": {
+            "mmsi": "257019230",
+            "imo": "9592238",
+            "name": "STENA CARRIER",
+            "callsign": "LAZY",
+            "flag": "Norway",
+            "flag_code": "NO",
+            "vessel_type": "Chemical Tanker",
+            "length_m": 160,
+            "beam_m": 26,
+            "draught_m": 9.5,
+            "dwt": 25000,
+            "speed_knots": 11.8,
+            "heading_deg": 45,
+        },
+        "MSC_AMALIA": {
+            "mmsi": "353892000",
+            "imo": "9811000",
+            "name": "MSC AMALIA",
+            "callsign": "3EGH",
+            "flag": "Panama",
+            "flag_code": "PA",
+            "vessel_type": "Container Ship",
+            "length_m": 399,
+            "beam_m": 61,
+            "draught_m": 16.0,
+            "dwt": 198000,
+            "speed_knots": 19.2,
+            "heading_deg": 230,
+        },
+        "ALEXANDRIA_GLORY": {
+            "mmsi": "622123401",
+            "imo": "9451203",
+            "name": "ALEXANDRIA GLORY",
+            "callsign": "6AXY",
+            "flag": "Egypt",
+            "flag_code": "EG",
+            "vessel_type": "Crude Oil Tanker",
+            "length_m": 274,
+            "beam_m": 48,
+            "draught_m": 16.2,
+            "dwt": 158000,
+            "speed_knots": 13.0,
+            "heading_deg": 310,
+        },
+        "AEGEAN_SEAWAYS": {
+            "mmsi": "240893000",
+            "imo": "9293450",
+            "name": "AEGEAN SEAWAYS",
+            "callsign": "SVAD",
+            "flag": "Greece",
+            "flag_code": "GR",
+            "vessel_type": "Product Tanker",
+            "length_m": 183,
+            "beam_m": 32,
+            "draught_m": 11.5,
+            "dwt": 51200,
+            "speed_knots": 13.8,
+            "heading_deg": 135,
+        },
+        "PACIFIC_EXPLORER": {
+            "mmsi": "636018442",
+            "imo": "9312896",
+            "name": "PACIFIC EXPLORER",
+            "callsign": "A8XG",
+            "flag": "Liberia",
+            "flag_code": "LR",
+            "vessel_type": "Bulk Carrier",
+            "length_m": 225,
+            "beam_m": 32,
+            "draught_m": 12.5,
+            "dwt": 75000,
+            "speed_knots": 10.5,
+            "heading_deg": 225,
+        },
+        "EVER_HORIZON": {
+            "mmsi": "416492000",
+            "imo": "9786851",
+            "name": "EVER HORIZON",
+            "callsign": "BKHE",
+            "flag": "Taiwan",
+            "flag_code": "TW",
+            "vessel_type": "Container Ship",
+            "length_m": 366,
+            "beam_m": 51,
+            "draught_m": 15.2,
+            "dwt": 140000,
+            "speed_knots": 18.5,
+            "heading_deg": 85,
+        },
+        "HAVFROST": {
+            "mmsi": "219001452",
+            "imo": "8920194",
+            "name": "HAVFROST",
+            "callsign": "OXYA",
+            "flag": "Denmark",
+            "flag_code": "DK",
+            "vessel_type": "Fishing Vessel",
+            "length_m": 42,
+            "beam_m": 9,
+            "draught_m": 4.5,
+            "dwt": 850,
+            "speed_knots": 7.2,
+            "heading_deg": 120,
+        },
+    }
+
+    SAMPLE_PRIMARY_SUSPECT = {
+        "00000": "NORDIC_TITAN",
+        "00002": "HMC_MALAISKA",
+        "00003": "BALTIC_ADMIRAL",
+        "00004": "STENA_CARRIER",
+        "00006": "MSC_AMALIA",
+        "00007": "HMC_MALAISKA",
+        "00008": "ALEXANDRIA_GLORY",
+        "00009": "AEGEAN_SEAWAYS",
+        "00010": "HMC_MALAISKA",
+        "00203": "PACIFIC_EXPLORER",
+    }
+
     def generate_sector_ais_traffic(
         self,
         centroid_lat: float,
         centroid_lon: float,
         scene_timestamp: Optional[str] = None,
+        sample_id: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         Generates realistic maritime AIS traffic corridor tracks traversing the surveillance sector
         centered on the given oil spill coordinates. Includes realistic commercial vessel profiles
-        (crude tankers, container ships, bulk carriers, fishing vessels) with timestamps.
+        (crude tankers, chemical tankers, container ships, bulk carriers, fishing vessels) with timestamps.
+        Dynamically distributes primary suspect status across different vessels based on scene/sample ID.
         """
         if not scene_timestamp:
             base_time = datetime(2026, 3, 14, 17, 30, 0, tzinfo=timezone.utc)
@@ -167,110 +335,41 @@ class VesselIdentifier:
             except Exception:
                 base_time = datetime(2026, 3, 14, 17, 30, 0, tzinfo=timezone.utc)
 
-        fleet_templates = [
-            {
-                "mmsi": "244670112",
-                "imo": "9384912",
-                "name": "NORDIC TITAN",
-                "callsign": "PCDE",
-                "flag": "Netherlands",
-                "flag_code": "NL",
-                "vessel_type": "Crude Oil Tanker",
-                "length_m": 249,
-                "beam_m": 44,
-                "draught_m": 14.8,
-                "dwt": 115000,
-                "speed_knots": 12.4,
-                "heading_deg": 48,
-                "offset_km": 0.6,    # Traverses right through the slick center zone!
-                "time_offset_min": -25,
-            },
-            {
-                "mmsi": "211543880",
-                "imo": "9421805",
-                "name": "BALTIC ADMIRAL",
-                "callsign": "DLBZ",
-                "flag": "Germany",
-                "flag_code": "DE",
-                "vessel_type": "Product Tanker",
-                "length_m": 183,
-                "beam_m": 32,
-                "draught_m": 11.2,
-                "dwt": 49990,
-                "speed_knots": 14.1,
-                "heading_deg": 52,
-                "offset_km": 4.2,    # Near corridor
-                "time_offset_min": -65,
-            },
-            {
-                "mmsi": "353892000",
-                "imo": "9811000",
-                "name": "MSC AMALIA",
-                "callsign": "3EGH",
-                "flag": "Panama",
-                "flag_code": "PA",
-                "vessel_type": "Container Ship",
-                "length_m": 399,
-                "beam_m": 61,
-                "draught_m": 16.0,
-                "dwt": 198000,
-                "speed_knots": 19.2,
-                "heading_deg": 230,
-                "offset_km": 9.5,
-                "time_offset_min": 45,
-            },
-            {
-                "mmsi": "257019230",
-                "imo": "9592238",
-                "name": "STENA CARRIER",
-                "callsign": "LAZY",
-                "flag": "Norway",
-                "flag_code": "NO",
-                "vessel_type": "Chemical Tanker",
-                "length_m": 160,
-                "beam_m": 26,
-                "draught_m": 9.5,
-                "dwt": 25000,
-                "speed_knots": 11.8,
-                "heading_deg": 45,
-                "offset_km": 14.8,
-                "time_offset_min": -130,
-            },
-            {
-                "mmsi": "636018442",
-                "imo": "9312896",
-                "name": "PACIFIC EXPLORER",
-                "callsign": "A8XG",
-                "flag": "Liberia",
-                "flag_code": "LR",
-                "vessel_type": "Bulk Carrier",
-                "length_m": 225,
-                "beam_m": 32,
-                "draught_m": 12.5,
-                "dwt": 75000,
-                "speed_knots": 10.5,
-                "heading_deg": 225,
-                "offset_km": 22.4,
-                "time_offset_min": 180,
-            },
-            {
-                "mmsi": "219001452",
-                "imo": "8920194",
-                "name": "HAVFROST",
-                "callsign": "OXYA",
-                "flag": "Denmark",
-                "flag_code": "DK",
-                "vessel_type": "Fishing Vessel",
-                "length_m": 42,
-                "beam_m": 9,
-                "draught_m": 4.5,
-                "dwt": 850,
-                "speed_knots": 7.2,
-                "heading_deg": 120,
-                "offset_km": 28.6,
-                "time_offset_min": -90,
-            },
+        # Determine primary suspect vessel for this sector
+        if sample_id and sample_id in self.SAMPLE_PRIMARY_SUSPECT:
+            prime_key = self.SAMPLE_PRIMARY_SUSPECT[sample_id]
+        else:
+            # Deterministic hash-based selection if sample_id is unknown
+            all_keys = list(self.FLEET_CATALOG.keys())
+            h = int(abs(centroid_lat * 1000 + centroid_lon * 100))
+            prime_key = all_keys[h % len(all_keys)]
+
+        # Select other vessels for sector traffic corridor (6 vessels per sector)
+        other_keys = [k for k in self.FLEET_CATALOG.keys() if k != prime_key]
+        
+        # Order sector fleet: prime vessel gets the direct spill intersection corridor
+        secondary_offsets = [
+            {"offset_km": 4.5, "time_offset_min": -65},
+            {"offset_km": 9.8, "time_offset_min": 45},
+            {"offset_km": 15.5, "time_offset_min": -130},
+            {"offset_km": 22.8, "time_offset_min": 175},
+            {"offset_km": 30.5, "time_offset_min": -90},
         ]
+
+        fleet_templates = []
+        # Prime suspect vessel (traverses directly through the spill centroid zone)
+        prime_data = dict(self.FLEET_CATALOG[prime_key])
+        prime_data["offset_km"] = 0.55
+        prime_data["time_offset_min"] = -24
+        fleet_templates.append(prime_data)
+
+        # Add remaining secondary vessels
+        for i, conf in enumerate(secondary_offsets):
+            sec_key = other_keys[i % len(other_keys)]
+            sec_data = dict(self.FLEET_CATALOG[sec_key])
+            sec_data["offset_km"] = conf["offset_km"]
+            sec_data["time_offset_min"] = conf["time_offset_min"]
+            fleet_templates.append(sec_data)
 
         vessels = []
         # Degrees per km approximation around latitude
@@ -340,6 +439,7 @@ class VesselIdentifier:
         spill_geojson: Dict[str, Any],
         scene_timestamp: Optional[str] = None,
         vessel_data: Optional[List[Dict[str, Any]]] = None,
+        sample_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Performs full AIS trajectory correlation against spill GeoJSON features using Shapely.
@@ -374,7 +474,9 @@ class VesselIdentifier:
         spill_buffer = spill_poly.buffer(buffer_deg)
 
         if not vessel_data:
-            vessel_data = self.generate_sector_ais_traffic(centroid_lat, centroid_lon, scene_timestamp)
+            vessel_data = self.generate_sector_ais_traffic(
+                centroid_lat, centroid_lon, scene_timestamp, sample_id=sample_id
+            )
 
         if scene_timestamp:
             try:
