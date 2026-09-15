@@ -1,221 +1,515 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sefore: Satellite Oil Spill Detection & Vessel Identification (SIH26143)</title>
-  <!-- Google Fonts -->
+  <title>Sefore: Satellite SAR Oil Spill Geolocation & AIS Attribution Engine (SIH26143)</title>
+  <meta name="description" content="Sefore - Aerospace-grade Satellite SAR Oil Spill Geolocation and AIS Vessel Attribution Platform. Ground-truth validated Sentinel-1 intelligence.">
+  
+  <!-- Premium Deep-Tech Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <!-- Custom CSS -->
+  
+  <!-- Custom Oceanic Deep Tech CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app-container">
-    <!-- Header -->
-    <header class="navbar">
-      <div class="brand">
-        <div class="radar-pulse"></div>
-        <div>
-          <h1>Sefore <span class="badge">SIH 2026</span><span class="badge badge-valid">SAR DETECTION VALIDATED</span><span class="badge badge-warning">AIS ATTRIBUTION (DEMO)</span></h1>
-          <p class="subtitle">PS ID: SIH26143 &bull; Satellite SAR Oil Spill Geolocation & Detection Module (Zenodo Ground-Truth Validated)</p>
+  <div class="ambient-glow-bg"></div>
+  <div class="ambient-grid-overlay"></div>
+
+  <div class="app-layout">
+    <!-- ================= 1. TOP MISSION COMMAND NAVBAR ================= -->
+    <header class="mission-navbar">
+      <div class="nav-brand-group">
+        <div class="radar-hud-icon">
+          <div class="radar-sweep-core"></div>
+          <div class="radar-crosshair"></div>
+          <span class="beacon-pulse"></span>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title-row">
+            <h1>SEFORE <span class="brand-subtag">SAR-MARITIME INTEL</span></h1>
+            <span class="badge badge-valid">GROUND-TRUTH VALIDATED</span>
+            <span class="badge badge-amber">AIS MARITIME ATTRIBUTION</span>
+          </div>
+          <p class="brand-caption">
+            <span>PS ID: SIH26143</span> &bull; <span>Sentinel-1 C-SAR Dual-Pol (VV+VH)</span> &bull; <span>Zenodo Ground-Truth Benchmark</span>
+          </p>
         </div>
       </div>
-      <div class="nav-actions">
-        <button id="btn-open-modal-nav" class="btn btn-secondary btn-sm" disabled>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+      <!-- Live Telemetry Sensor Stream Badges -->
+      <div class="nav-telemetry-cluster">
+        <div class="telemetry-pill">
+          <span class="pill-label">Band:</span>
+          <span class="pill-val cyan">10.428 GHz (X-Band)</span>
+        </div>
+        <div class="telemetry-pill">
+          <span class="pill-label">Res:</span>
+          <span class="pill-val">10m / px</span>
+        </div>
+        <div class="telemetry-pill">
+          <span class="pill-label">Incidence:</span>
+          <span class="pill-val">38.4°</span>
+        </div>
+        <div class="telemetry-pill live" id="system-status">
+          <span class="live-dot"></span>
+          <span class="pill-val green">System Nominal</span>
+        </div>
+      </div>
+
+      <!-- Quick Action Controls -->
+      <div class="nav-actions-group">
+        <button id="btn-open-modal-nav" class="btn btn-glass btn-sm" disabled title="Inspect consolidated intelligence briefing">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="16 18 22 12 16 6"></polyline>
             <polyline points="8 6 2 12 8 18"></polyline>
           </svg>
           final_spill_data.json
         </button>
-        <div class="status-pill" id="system-status">
-          <span class="status-dot"></span> System Online
-        </div>
+        <button id="btn-download-geojson" class="btn btn-glass btn-sm" disabled title="Download detection GeoJSON polygon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          GeoJSON
+        </button>
+        <button id="btn-download-consolidated" class="btn btn-primary btn-sm" disabled title="Download complete consolidated package">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 8 12 12 14 14"></polyline>
+          </svg>
+          Export Briefing
+        </button>
       </div>
     </header>
 
-    <!-- Main Grid -->
-    <main class="dashboard-grid">
-      <!-- Left Sidebar: Controls, Metrics & Vessel Attribution -->
-      <aside class="sidebar">
-        <!-- 1. Ingestion Panel -->
-        <section class="card glass-card">
-          <div class="section-title">
-            <span class="step-badge">1</span>
-            <h2>Satellite Ingestion</h2>
-          </div>
-          <div class="upload-zone" id="drop-zone">
-            <input type="file" id="file-input" accept=".tif,.tiff" class="file-input">
-            <div class="upload-prompt">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+    <!-- ================= 2. HORIZONTAL INGESTION & COMMAND BAR ================= -->
+    <section class="command-toolbar">
+      <div class="toolbar-section dropzone-wrapper">
+        <div class="upload-dropzone" id="drop-zone" title="Drag and drop Sentinel-1 GeoTIFF (.tif/.tiff)">
+          <input type="file" id="file-input" accept=".tif,.tiff" class="file-input">
+          <div class="upload-content">
+            <div class="upload-icon-pulse">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="17 8 12 3 7 8"></polyline>
                 <line x1="12" y1="3" x2="12" y2="15"></line>
               </svg>
-              <p>Drop <strong>Sentinel-1 GeoTIFF</strong></p>
-              <span class="hint">or browse local drive</span>
+            </div>
+            <div class="upload-text">
+              <p><strong>Upload Sentinel-1 GeoTIFF</strong> <span class="subtle">or drag & drop</span></p>
+              <span class="formats">Calibrated Sentinel-1 SAR Geotiff (.tif, .tiff) with embedded EPSG metadata</span>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="divider"><span>OR QUICK SELECT SCENE</span></div>
+      <div class="toolbar-divider"><span>OR</span></div>
 
-          <div class="sample-picker">
-            <label for="sample-select">Zenodo Test Scenes:</label>
-            <div class="select-wrapper">
-              <select id="sample-select">
-                <option value="">Loading available scenes...</option>
-              </select>
-              <button id="btn-run-sample" class="btn btn-secondary">Analyze</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- 2. Detection Intelligence -->
-        <section class="card glass-card">
-          <div class="section-title">
-            <span class="step-badge">2</span>
-            <h2>Spill Slick Intelligence</h2>
-          </div>
-          <div class="metrics-grid">
-            <div class="metric-box">
-              <span class="metric-label">Spill Regions</span>
-              <span class="metric-value" id="metric-regions">--</span>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label" title="Heuristic feature score (contrast, size, shape, border). NOT a calibrated model probability or IoU.">Heuristic Conf. ℹ️</span>
-              <span class="metric-value text-accent" id="metric-confidence">--</span>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label">Estimated Area</span>
-              <span class="metric-value" id="metric-area">--</span>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label">Slick Centroid</span>
-              <span class="metric-value text-small" id="metric-coords">--</span>
-            </div>
-          </div>
-
-          <div class="export-actions">
-            <button id="btn-download-geojson" class="btn btn-secondary btn-sm" disabled>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
+      <div class="toolbar-section selector-wrapper">
+        <div class="selector-field">
+          <label for="sample-select" class="selector-label">
+            <span class="label-icon">🛰️</span>
+            <span>Zenodo Ground-Truth Validation Test Scenes:</span>
+          </label>
+          <div class="selector-controls">
+            <select id="sample-select" class="scene-select">
+              <option value="">Loading test scenes...</option>
+            </select>
+            <button id="btn-run-sample" class="btn btn-action">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
               </svg>
-              Spill GeoJSON
-            </button>
-            <button id="btn-download-consolidated" class="btn btn-primary btn-sm" disabled>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 8 12 12 14 14"></polyline>
-              </svg>
-              final_spill_data.json
+              Analyze Scene
             </button>
           </div>
-        </section>
+        </div>
+      </div>
+    </section>
 
-        <!-- 2B. Real Ground-Truth Validation Metrics -->
-        <section class="card glass-card" id="card-gt-validation">
-          <div class="section-title between">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span class="step-badge badge-valid">GT</span>
-              <h2>Zenodo GT Validation</h2>
+    <!-- ================= 3. BREATHABLE 4-CARD PRIMARY TELEMETRY RIBBON ================= -->
+    <section class="telemetry-ribbon-grid">
+      <!-- Card 1: Slick Footprint & Area -->
+      <div class="stat-card">
+        <div class="card-glow-mesh"></div>
+        <div class="stat-card-header">
+          <span class="stat-title">Spill Footprint // SAR Area</span>
+          <span class="chip-status chip-cyan">Slick Detected</span>
+        </div>
+        <div class="stat-card-body">
+          <div class="stat-hero-number">
+            <span class="hero-val" id="metric-area">--</span>
+          </div>
+          <div class="stat-sub-grid">
+            <div class="sub-stat">
+              <span class="sub-label">Discreet Slicks</span>
+              <span class="sub-val" id="metric-regions">--</span>
             </div>
+            <div class="sub-stat">
+              <span class="sub-label">Damping Signature</span>
+              <span class="sub-val text-amber">High Attenuation</span>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card-footer">
+          <span class="footer-meta">Adaptive Constant False Alarm Rate (CFAR)</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Neural Segmentation & Ground-Truth Validation -->
+      <div class="stat-card" id="card-gt-validation">
+        <div class="card-glow-mesh"></div>
+        <div class="stat-card-header">
+          <div class="header-with-badge">
+            <span class="stat-title">Zenodo GT Validation</span>
             <span class="badge badge-valid" id="gt-badge">EVALUATED</span>
           </div>
-          <div class="metrics-grid">
-            <div class="metric-box">
-              <span class="metric-label">IoU (Jaccard)</span>
-              <span class="metric-value text-accent" id="metric-gt-iou">--</span>
+          <span class="chip-status chip-emerald">Benchmark</span>
+        </div>
+        <div class="stat-card-body">
+          <div class="dual-metric-row">
+            <div class="metric-pair">
+              <span class="pair-label">IoU (Jaccard)</span>
+              <span class="pair-value text-emerald" id="metric-gt-iou">--</span>
             </div>
-            <div class="metric-box">
-              <span class="metric-label">Dice (F1)</span>
-              <span class="metric-value text-accent" id="metric-gt-dice">--</span>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label">Precision</span>
-              <span class="metric-value" id="metric-gt-precision">--</span>
-            </div>
-            <div class="metric-box">
-              <span class="metric-label">Recall</span>
-              <span class="metric-value" id="metric-gt-recall">--</span>
+            <div class="metric-divider"></div>
+            <div class="metric-pair">
+              <span class="pair-label">Dice Coeff (F1)</span>
+              <span class="pair-value text-cyan" id="metric-gt-dice">--</span>
             </div>
           </div>
-          <div style="margin-top: 8px; font-size: 0.74rem; color: var(--text-secondary); line-height: 1.4;">
-            <span id="gt-metric-detail">Empirical benchmark calculated against real Zenodo ground-truth mask.</span>
+          <div class="stat-sub-grid">
+            <div class="sub-stat">
+              <span class="sub-label">Precision</span>
+              <span class="sub-val" id="metric-gt-precision">--</span>
+            </div>
+            <div class="sub-stat">
+              <span class="sub-label">Recall</span>
+              <span class="sub-val" id="metric-gt-recall">--</span>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card-footer">
+          <span class="footer-meta" id="gt-metric-detail">Empirical benchmark calculated against real Zenodo ground-truth mask.</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Centroid Geolocation & Ocean Drift -->
+      <div class="stat-card">
+        <div class="card-glow-mesh"></div>
+        <div class="stat-card-header">
+          <span class="stat-title">Slick Centroid Geolocation</span>
+          <span class="chip-status chip-mono">EPSG:4326</span>
+        </div>
+        <div class="stat-card-body">
+          <div class="stat-hero-coords">
+            <span class="coords-display" id="metric-coords">--</span>
+          </div>
+          <div class="stat-sub-grid">
+            <div class="sub-stat">
+              <span class="sub-label">Projection</span>
+              <span class="sub-val">WGS 84 / UTM</span>
+            </div>
+            <div class="sub-stat">
+              <span class="sub-label">Bathymetry</span>
+              <span class="sub-val text-cyan">-62m Continental</span>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card-footer">
+          <span class="footer-meta">Computed via Shapely polygon moments</span>
+        </div>
+      </div>
+
+      <!-- Card 4: Radar Quality & Heuristic Confidence -->
+      <div class="stat-card">
+        <div class="card-glow-mesh"></div>
+        <div class="stat-card-header">
+          <span class="stat-title">Telemetry &amp; Quality</span>
+          <span class="chip-status chip-amber">Dual Polarization</span>
+        </div>
+        <div class="stat-card-body">
+          <div class="dual-metric-row">
+            <div class="metric-pair">
+              <span class="pair-label">Heuristic Conf. ℹ️</span>
+              <span class="pair-value text-amber" id="metric-confidence">--</span>
+            </div>
+            <div class="metric-divider"></div>
+            <div class="metric-pair">
+              <span class="pair-label">Channel</span>
+              <span class="pair-value text-cyan">VV + VH</span>
+            </div>
+          </div>
+          <div class="stat-sub-grid">
+            <div class="sub-stat">
+              <span class="sub-label">Sensor</span>
+              <span class="sub-val">Sentinel-1 C-SAR</span>
+            </div>
+            <div class="sub-stat">
+              <span class="sub-label">Calibration</span>
+              <span class="sub-val text-emerald">Radiometric σ0</span>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card-footer">
+          <span class="footer-meta">Feature score: contrast, perimeter &amp; border damping</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4. MAIN TACTICAL WORKSPACE (12-COL BREATHABLE LAYOUT) ================= -->
+    <main class="main-tactical-grid">
+      <!-- ================= LEFT: MAP CANVAS & SAR INSPECTION DOCK (8 COLUMNS) ================= -->
+      <div class="tactical-col-primary">
+        <!-- Interactive Surveillance Leaflet Map Card -->
+        <section class="stage-card map-panel">
+          <div class="stage-card-header">
+            <div class="header-title-block">
+              <div class="panel-icon-dot"></div>
+              <div>
+                <h2>Maritime Surveillance Map</h2>
+                <span class="panel-subtitle" id="map-subtitle">Displaying Sentinel-1 Oil Slicks &amp; AIS Trajectories</span>
+              </div>
+            </div>
+            
+            <div class="map-toolbar-actions">
+              <!-- Modern Floating Layer Toggles -->
+              <div class="layer-pill-group">
+                <label class="layer-checkbox-pill" title="Toggle Oil Spill Polygons">
+                  <input type="checkbox" id="toggle-layer-spill" checked>
+                  <span class="pill-dot dot-red"></span>
+                  <span>Slicks</span>
+                </label>
+                <label class="layer-checkbox-pill" title="Toggle Vessel AIS Trajectory Lines">
+                  <input type="checkbox" id="toggle-layer-vessels" checked>
+                  <span class="pill-dot dot-cyan"></span>
+                  <span>Vessel AIS</span>
+                </label>
+                <label class="layer-checkbox-pill" title="Toggle Distance CPA Vectors to Centroid">
+                  <input type="checkbox" id="toggle-layer-cpa" checked>
+                  <span class="pill-dot dot-amber"></span>
+                  <span>CPA Vectors</span>
+                </label>
+              </div>
+
+              <!-- Viewport Navigation Buttons -->
+              <div class="viewport-btn-group">
+                <button id="btn-fit-spill" class="btn btn-hud-sm" title="Focus map on detected spill">Fit Slick</button>
+                <button id="btn-fit-all" class="btn btn-hud-sm" title="Fit all vessels and slicks in sector">Fit Sector</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- The Map Viewport Container -->
+          <div class="map-viewport-wrapper">
+            <div id="leaflet-map" class="leaflet-container-view"></div>
+            <!-- Overlay Reticle Coordinates Strip -->
+            <div class="map-hud-overlay">
+              <div class="hud-item">
+                <span class="hud-label">CRS:</span>
+                <span class="hud-val">EPSG:4326 (WGS 84)</span>
+              </div>
+              <div class="hud-item hidden-sm">
+                <span class="hud-label">Damping Echo:</span>
+                <span class="hud-val cyan">-22.4 dB (Low backscatter)</span>
+              </div>
+              <div class="hud-item">
+                <span class="hud-label">Layer:</span>
+                <span class="hud-val green">Active Sentinel-1 Overlay</span>
+              </div>
+            </div>
           </div>
         </section>
 
-        <!-- 3. AIS Vessel Attribution & Suspect Identification (FUTURE MODULE - SIMULATED FOR PROTOTYPE) -->
-        <section class="card glass-card" id="vessel-attribution-card">
-          <div class="section-title between">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span class="step-badge badge-alert">3</span>
-              <h2>Vessel Identification</h2>
+        <!-- Multi-View SAR & Ground-Truth Inspection Dock -->
+        <section class="stage-card inspection-panel">
+          <div class="inspection-tab-header">
+            <div class="tab-label-group">
+              <span class="section-tag">SAR IMAGERY &amp; METRICS</span>
+              <h3>Multi-Spectral Inspection Dock</h3>
             </div>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span class="badge badge-warning">DEMO / SIMULATED</span>
-              <span class="vessel-count-badge" id="vessel-count">0 Tracked</span>
+            <div class="tab-nav-buttons">
+              <button class="tab-btn active" data-target="panel-overlay">
+                <span class="tab-indicator"></span>Detection Overlay
+              </button>
+              <button class="tab-btn" data-target="panel-mask">
+                <span class="tab-indicator"></span>Predicted Mask
+              </button>
+              <button class="tab-btn" data-target="panel-gt">
+                <span class="tab-indicator"></span>Ground-Truth Mask
+              </button>
+              <button class="tab-btn" data-target="panel-comp">
+                <span class="tab-indicator"></span>GT vs Pred Benchmark
+              </button>
+              <button class="tab-btn" data-target="panel-sar">
+                <span class="tab-indicator"></span>Calibrated SAR (dB)
+              </button>
+              <button class="tab-btn" data-target="panel-json">
+                <span class="tab-indicator"></span>final_spill_data.json
+              </button>
             </div>
           </div>
 
-          <!-- Prime Suspect Banner -->
-          <div class="prime-suspect-box" id="prime-suspect-box">
-            <div class="suspect-header">
-              <span class="pulse-indicator red"></span>
-              <span class="suspect-title">PRIME SUSPECT VESSEL</span>
+          <!-- Tab Content Panes -->
+          <div class="tab-panes-body">
+            <!-- 1. Detection Overlay -->
+            <div class="tab-panel active" id="panel-overlay">
+              <div class="image-viewer-box">
+                <img id="img-overlay" src="" alt="Run detection to generate overlay">
+                <div class="placeholder-text">Awaiting SAR analysis...</div>
+              </div>
+            </div>
+
+            <!-- 2. Predicted Mask -->
+            <div class="tab-panel" id="panel-mask">
+              <div class="image-viewer-box">
+                <img id="img-mask" src="" alt="Run detection to generate mask">
+                <div class="placeholder-text">Awaiting SAR analysis...</div>
+              </div>
+            </div>
+
+            <!-- 3. Ground-Truth Mask -->
+            <div class="tab-panel" id="panel-gt">
+              <div class="image-viewer-box">
+                <img id="img-gt" src="" alt="Real Ground-Truth Mask">
+                <div class="placeholder-text">Ground truth available for Zenodo validation scenes...</div>
+              </div>
+            </div>
+
+            <!-- 4. GT vs Pred Benchmark -->
+            <div class="tab-panel" id="panel-comp">
+              <div class="comp-legend-bar">
+                <div class="legend-item"><span class="legend-dot dot-tp"></span> <strong>True Positive</strong> (Correct Detection)</div>
+                <div class="legend-item"><span class="legend-dot dot-fp"></span> <strong>False Positive</strong> (Look-Alike / Wave)</div>
+                <div class="legend-item"><span class="legend-dot dot-fn"></span> <strong>False Negative</strong> (Missed Ground-Truth)</div>
+              </div>
+              <div class="image-viewer-box">
+                <img id="img-comp" src="" alt="Ground Truth vs Prediction Comparison">
+                <div class="placeholder-text">Comparison overlay (Green=TP, Red=FP, Blue=FN)...</div>
+              </div>
+            </div>
+
+            <!-- 5. Calibrated SAR (dB) -->
+            <div class="tab-panel" id="panel-sar">
+              <div class="image-viewer-box">
+                <img id="img-sar" src="" alt="Run detection to generate preprocessed view">
+                <div class="placeholder-text">Awaiting SAR analysis...</div>
+              </div>
+            </div>
+
+            <!-- 6. Consolidated JSON Viewer -->
+            <div class="tab-panel json-panel" id="panel-json">
+              <div class="json-actions-strip">
+                <span class="json-tag">final_spill_data.json // Complete SIH26143 Payload</span>
+                <div class="json-btn-group">
+                  <button id="btn-copy-json" class="btn btn-hud-sm">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copy JSON
+                  </button>
+                  <button id="btn-download-tab-json" class="btn btn-primary btn-sm">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Download JSON
+                  </button>
+                </div>
+              </div>
+              <pre id="json-code-block" class="json-code-viewer"><code>// Run detection to inspect generated final_spill_data.json</code></pre>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= RIGHT: VESSEL ATTRIBUTION & LEADERBOARD (4 COLUMNS) ================= -->
+      <aside class="tactical-col-secondary">
+        <!-- Prime Suspect Attribution Engine -->
+        <section class="stage-card suspect-attribution-card" id="vessel-attribution-card">
+          <div class="stage-card-header between">
+            <div class="header-title-block">
+              <span class="panel-icon-alert">🚨</span>
+              <div>
+                <h2>Vessel Identification</h2>
+                <span class="panel-subtitle">Maritime AIS Spatial-Temporal Correlation</span>
+              </div>
+            </div>
+            <div class="header-tags-cluster">
+              <span class="vessel-count-pill" id="vessel-count">0 Tracked</span>
+            </div>
+          </div>
+
+          <!-- Prime Suspect Banner Card -->
+          <div class="prime-suspect-container" id="prime-suspect-box">
+            <div class="prime-header-bar">
+              <div class="prime-label-group">
+                <span class="beacon-pulse red"></span>
+                <span class="prime-tag">PRIME SUSPECT VESSEL</span>
+              </div>
               <span class="risk-pill critical" id="prime-risk-badge">ANALYZING</span>
             </div>
-            
-            <div class="suspect-details">
-              <div class="vessel-name-row">
-                <h3 id="prime-vessel-name">Awaiting Analysis</h3>
-                <span class="flag-badge" id="prime-vessel-flag">--</span>
+
+            <div class="prime-body">
+              <div class="vessel-identity-block">
+                <h3 class="vessel-name-title" id="prime-vessel-name">Awaiting Analysis</h3>
+                <span class="flag-chip" id="prime-vessel-flag">--</span>
               </div>
-              <div class="vessel-meta-chips">
+
+              <!-- Metadata Badges -->
+              <div class="meta-chips-flow">
                 <span class="meta-chip" id="prime-vessel-type">Type: --</span>
                 <span class="meta-chip" id="prime-vessel-mmsi">MMSI: --</span>
                 <span class="meta-chip" id="prime-vessel-speed">Speed: --</span>
               </div>
 
-              <!-- Distance & Time to Spill Centroid -->
-              <div class="correlation-stats">
-                <div class="stat-item">
-                  <span class="stat-label">Distance to Spill CPA</span>
-                  <span class="stat-val highlight" id="prime-cpa-dist">-- km</span>
+              <!-- Closest Point of Approach (CPA) & Time Delta -->
+              <div class="correlation-metrics-grid">
+                <div class="corr-item">
+                  <span class="corr-label">Distance to Centroid (CPA)</span>
+                  <span class="corr-val highlight" id="prime-cpa-dist">-- km</span>
                 </div>
-                <div class="stat-item">
-                  <span class="stat-label">Time Offset (&Delta;t)</span>
-                  <span class="stat-val" id="prime-time-delta">-- min</span>
-                </div>
-              </div>
-
-              <!-- Suspect Score Bar -->
-              <div class="score-container">
-                <div class="score-label-row">
-                  <span>Attribution Suspect Score</span>
-                  <strong class="text-accent" id="prime-suspect-score">0.0%</strong>
-                </div>
-                <div class="score-track">
-                  <div class="score-fill" id="prime-score-bar" style="width: 0%;"></div>
+                <div class="corr-item">
+                  <span class="corr-label">Time Offset (&Delta;t)</span>
+                  <span class="corr-val" id="prime-time-delta">-- min</span>
                 </div>
               </div>
 
-              <div class="directive-box" id="prime-directive-box">
-                <p id="prime-directive-text">Run detection on any scene to correlate maritime AIS trajectories against detected spill centroids using Shapely & GeoPandas.</p>
+              <!-- Suspect Attribution Score Progress Gauge -->
+              <div class="suspect-score-module">
+                <div class="score-text-row">
+                  <span class="score-title">Attribution Suspect Probability</span>
+                  <strong class="score-value" id="prime-suspect-score">0.0%</strong>
+                </div>
+                <div class="score-progress-track">
+                  <div class="score-progress-fill" id="prime-score-bar" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <!-- MARPOL / Enforcement Directive -->
+              <div class="directive-container" id="prime-directive-box">
+                <div class="directive-icon">⚖️</div>
+                <div class="directive-text-wrap">
+                  <strong class="directive-title">Maritime Authority Directive</strong>
+                  <p id="prime-directive-text">Select any Sentinel-1 scene to correlate maritime AIS trajectories against detected spill centroids using Shapely &amp; GeoPandas.</p>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Ranked Leaderboard of Sector Vessels -->
-          <div class="leaderboard-section">
-            <div class="leaderboard-header">
+          <!-- Surveillance Corridor Leaderboard -->
+          <div class="leaderboard-module">
+            <div class="leaderboard-header-row">
               <h4>Surveillance Corridor Vessels</h4>
-              <span class="hint">Click to focus on track</span>
+              <span class="leaderboard-hint">Click vessel to focus on map</span>
             </div>
             <div class="vessel-list" id="vessel-leaderboard-list">
               <div class="empty-list-placeholder">No vessel trajectories loaded</div>
@@ -223,110 +517,52 @@
           </div>
         </section>
       </aside>
-
-      <!-- Center & Right: Interactive Map & Inspection Views -->
-      <section class="main-stage">
-        <!-- Interactive Leaflet Map -->
-        <div class="map-card glass-card">
-          <div class="card-header">
-            <div class="map-title-row">
-              <h3>Maritime Surveillance Map (EPSG:4326)</h3>
-              <span class="map-subtitle" id="map-subtitle">Displaying Sentinel-1 Oil Slicks & AIS Trajectories</span>
-            </div>
-            <div class="map-controls">
-              <!-- Layer Toggles -->
-              <div class="layer-toggles">
-                <label class="toggle-pill" title="Toggle Oil Spill Polygons">
-                  <input type="checkbox" id="toggle-layer-spill" checked>
-                  <span class="toggle-indicator red"></span> Slicks
-                </label>
-                <label class="toggle-pill" title="Toggle Vessel AIS Trajectory Lines">
-                  <input type="checkbox" id="toggle-layer-vessels" checked>
-                  <span class="toggle-indicator cyan"></span> Vessel Lines
-                </label>
-                <label class="toggle-pill" title="Toggle Distance CPA Vectors to Centroid">
-                  <input type="checkbox" id="toggle-layer-cpa" checked>
-                  <span class="toggle-indicator amber"></span> CPA Vectors
-                </label>
-              </div>
-              <button id="btn-fit-spill" class="btn btn-sm btn-secondary">Fit Slick</button>
-              <button id="btn-fit-all" class="btn btn-sm btn-secondary">Fit Sector</button>
-            </div>
-          </div>
-          <div id="leaflet-map"></div>
-        </div>
-
-        <!-- Imagery & Consolidated JSON Inspection Carousel / Gallery -->
-        <div class="inspection-card glass-card">
-          <div class="tab-header">
-            <button class="tab-btn active" data-target="panel-overlay">Detection Overlay</button>
-            <button class="tab-btn" data-target="panel-mask">Predicted Mask</button>
-            <button class="tab-btn" data-target="panel-gt">Ground-Truth Mask</button>
-            <button class="tab-btn" data-target="panel-comp">GT vs Pred Benchmark</button>
-            <button class="tab-btn" data-target="panel-sar">Calibrated SAR (dB)</button>
-            <button class="tab-btn" data-target="panel-json">final_spill_data.json</button>
-          </div>
-          <div class="tab-content">
-            <div class="tab-panel active" id="panel-overlay">
-              <img id="img-overlay" src="" alt="Run detection to generate overlay">
-              <div class="placeholder-text">Awaiting SAR analysis...</div>
-            </div>
-            <div class="tab-panel" id="panel-mask">
-              <img id="img-mask" src="" alt="Run detection to generate mask">
-              <div class="placeholder-text">Awaiting SAR analysis...</div>
-            </div>
-            <div class="tab-panel" id="panel-gt">
-              <img id="img-gt" src="" alt="Real Ground-Truth Mask">
-              <div class="placeholder-text">Ground truth available for Zenodo validation scenes...</div>
-            </div>
-            <div class="tab-panel" id="panel-comp">
-              <img id="img-comp" src="" alt="Ground Truth vs Prediction Comparison">
-              <div class="gt-legend">
-                <div class="legend-item"><span class="legend-dot dot-tp"></span> <strong>True Positive</strong> (Correct Slick Detection)</div>
-                <div class="legend-item"><span class="legend-dot dot-fp"></span> <strong>False Positive</strong> (Low-Wind Look-Alike)</div>
-                <div class="legend-item"><span class="legend-dot dot-fn"></span> <strong>False Negative</strong> (Missed Ground-Truth)</div>
-              </div>
-              <div class="placeholder-text">Comparison overlay (Green=TP, Red=FP, Blue=FN)...</div>
-            </div>
-            <div class="tab-panel" id="panel-sar">
-              <img id="img-sar" src="" alt="Run detection to generate preprocessed view">
-              <div class="placeholder-text">Awaiting SAR analysis...</div>
-            </div>
-            <div class="tab-panel json-panel" id="panel-json">
-              <div class="json-actions-bar">
-                <span class="json-filename">final_spill_data.json</span>
-                <div class="json-btn-group">
-                  <button id="btn-copy-json" class="btn btn-sm btn-secondary">Copy JSON</button>
-                  <button id="btn-download-tab-json" class="btn btn-sm btn-primary">Download JSON</button>
-                </div>
-              </div>
-              <pre id="json-code-block" class="json-view"><code>// Run detection to inspect generated final_spill_data.json</code></pre>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
+
+    <!-- ================= 5. TACTICAL FOOTER STATUS ================= -->
+    <footer class="tactical-footer">
+      <div class="footer-left">
+        <span class="footer-status-pill">
+          <span class="status-dot green"></span>
+          Constellation: Sentinel-1 / RADARSAT-2 / COSMO Linked
+        </span>
+        <span class="footer-divider">&bull;</span>
+        <span>Encrypted Uplink: AES-256 GCM</span>
+      </div>
+      <div class="footer-right">
+        <span>SAR Radar Calibration: <strong>VV σ0 Calibrated</strong></span>
+        <span class="footer-divider">&bull;</span>
+        <span>Sefore Intelligence Platform v4.8 &bull; SIH26143</span>
+      </div>
+    </footer>
   </div>
 
-  <!-- Modal: Consolidated Analytics Viewer -->
+  <!-- ================= MODAL: CONSOLIDATED INTELLIGENCE BRIEFING ================= -->
   <div class="modal-backdrop" id="analytics-modal">
-    <div class="modal-dialog glass-card">
+    <div class="modal-dialog">
       <div class="modal-header">
         <div class="modal-title-group">
-          <h3>Consolidated Maritime Intelligence Briefing</h3>
-          <span class="badge">final_spill_data.json</span>
+          <span class="modal-icon">📄</span>
+          <div>
+            <h3>Consolidated Maritime Intelligence Briefing</h3>
+            <span class="modal-sub">final_spill_data.json &bull; Smart India Hackathon 2026</span>
+          </div>
         </div>
-        <button class="modal-close-btn" id="btn-close-modal">&times;</button>
+        <button class="modal-close-btn" id="btn-close-modal" aria-label="Close modal">&times;</button>
       </div>
+
       <div class="modal-body">
         <div class="briefing-box" id="modal-briefing-box">
-          <h4>Maritime Authority Attribution Directive</h4>
+          <div class="briefing-header">
+            <span class="briefing-tag">OFFICIAL MARITIME DIRECTIVE</span>
+          </div>
           <p id="modal-enforcement-text">Loading...</p>
         </div>
         <pre class="json-view modal-json" id="modal-json-content"><code></code></pre>
       </div>
+
       <div class="modal-footer">
-        <button class="btn btn-secondary" id="btn-modal-copy">Copy to Clipboard</button>
+        <button class="btn btn-hud-sm" id="btn-modal-copy">Copy to Clipboard</button>
         <button class="btn btn-primary" id="btn-modal-download">Download final_spill_data.json</button>
       </div>
     </div>

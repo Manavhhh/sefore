@@ -24,3 +24,6 @@ data/zenodo_validation/_temp_masks/
 # Keep data directory structure intact
 !data/images/
 !data/masks/
+
+# Local Netlify folder
+.netlify
