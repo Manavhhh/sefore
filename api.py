@@ -246,6 +246,8 @@ def download_output_file(file_type: str):
 
 # Mount static files and frontend
 app.mount("/output", StaticFiles(directory="output"), name="output")
+if os.path.exists("samples"):
+    app.mount("/samples", StaticFiles(directory="samples"), name="samples")
 if os.path.exists("frontend"):
     app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 

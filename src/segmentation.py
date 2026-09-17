@@ -65,13 +65,17 @@ class ContourSegmenter:
             aspect_ratio = float(w) / float(h) if h > 0 else 1.0
 
             # Compactness / Circularity: 4 * pi * Area / Perimeter^2 (1.0 for perfect circle)
-            compactness = float(4.0 * np.pi * area / (perimeter**2))
+            compactness_val = 4.0 * np.pi * area / (perimeter**2 + 1e-7)
+            compactness = float(np.clip(compactness_val, 0.0, 1.0))
 
             # Centroid calculation via moments
             moments = cv2.moments(cnt)
             if moments["m00"] != 0:
                 cx = float(moments["m10"] / moments["m00"])
                 cy = float(moments["m01"] / moments["m00"])
+                if np.isnan(cx) or np.isnan(cy):
+                    cx = float(x + w / 2.0)
+                    cy = float(y + h / 2.0)
             else:
                 cx = float(x + w / 2.0)
                 cy = float(y + h / 2.0)
@@ -80,25 +84,32 @@ class ContourSegmenter:
             mean_intensity = None
             contrast_ratio = None
             if normalized_image is not None:
-                # Create mask for this single contour
-                c_mask = np.zeros_like(mask_u8)
-                cv2.drawContours(c_mask, [cnt], -1, 255, -1)
-                spill_pixels = normalized_image[c_mask == 255]
-                if len(spill_pixels) > 0:
-                    mean_intensity = float(np.mean(spill_pixels))
+                norm_2d = np.squeeze(normalized_image)
+                if norm_2d.ndim == 2:
+                    # Create mask for this single contour
+                    c_mask = np.zeros_like(mask_u8)
+                    cv2.drawContours(c_mask, [cnt], -1, 255, -1)
+                    spill_pixels = norm_2d[c_mask == 255]
+                    if len(spill_pixels) > 0:
+                        m_int = float(np.mean(spill_pixels))
+                        mean_intensity = m_int if not np.isnan(m_int) else None
 
-                    # Local surrounding sea window for contrast calculation
-                    pad = 30
-                    y1 = max(0, y - pad)
-                    y2 = min(normalized_image.shape[0], y + h + pad)
-                    x1 = max(0, x - pad)
-                    x2 = min(normalized_image.shape[1], x + w + pad)
-                    local_crop = normalized_image[y1:y2, x1:x2]
-                    local_mask = c_mask[y1:y2, x1:x2]
-                    surrounding = local_crop[local_mask == 0]
-                    if len(surrounding) > 0:
-                        surr_mean = float(np.mean(surrounding))
-                        contrast_ratio = float((surr_mean - mean_intensity) / (surr_mean + 1e-5))
+                        # Local surrounding sea window for contrast calculation
+                        pad = 30
+                        y1 = max(0, y - pad)
+                        y2 = min(norm_2d.shape[0], y + h + pad)
+                        x1 = max(0, x - pad)
+                        x2 = min(norm_2d.shape[1], x + w + pad)
+                        local_crop = norm_2d[y1:y2, x1:x2]
+                        local_mask = c_mask[y1:y2, x1:x2]
+                        surrounding = local_crop[local_mask == 0]
+                        if len(surrounding) > 0:
+                            surr_mean = float(np.mean(surrounding))
+                            denom = surr_mean + 1e-5
+                            if abs(denom) > 1e-6 and mean_intensity is not None:
+                                c_ratio = float((surr_mean - mean_intensity) / denom)
+                                if not (np.isnan(c_ratio) or np.isinf(c_ratio)):
+                                    contrast_ratio = c_ratio
 
             candidate = SpillCandidate(
                 id=idx + 1,

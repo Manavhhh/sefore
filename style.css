@@ -1752,3 +1752,70 @@ html, body {
     display: none;
   }
 }
+
+/* ================= 10. DARK THEME LEAFLET POPUP STYLES ================= */
+.leaflet-popup-content-wrapper {
+  background: rgba(10, 16, 34, 0.95) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-focus) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(0, 240, 255, 0.2) !important;
+  color: var(--text-primary) !important;
+  padding: 4px 6px;
+}
+
+.leaflet-popup-tip {
+  background: rgba(10, 16, 34, 0.95) !important;
+  border: 1px solid var(--border-focus) !important;
+}
+
+.leaflet-popup-close-button {
+  color: var(--text-secondary) !important;
+  font-size: 16px !important;
+  padding: 6px !important;
+  transition: color 0.15s ease;
+}
+
+.leaflet-popup-close-button:hover {
+  color: var(--accent-cyan) !important;
+}
+
+.leaflet-container {
+  background: #060b18 !important;
+}
+
+/* Smooth Imagery Panel Loading & Hover Transitions */
+.imagery-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.imagery-container img {
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+/* Smooth Navigation & Tabs */
+.tab-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.vessel-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vessel-item:hover {
+  transform: translateX(3px);
+}

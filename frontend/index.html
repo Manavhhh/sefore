@@ -14,6 +14,9 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   
+  <!-- High-Tech SVG Radar Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23060b18' stroke='%2300f0ff' stroke-width='4'/%3E%3Ccircle cx='50' cy='50' r='28' fill='none' stroke='%2300f0ff' stroke-width='2' stroke-dasharray='4,4' opacity='0.6'/%3E%3Ccircle cx='50' cy='50' r='8' fill='%23ff3b5c'/%3E%3Cline x1='50' y1='5' x2='50' y2='95' stroke='%2300f0ff' stroke-width='1.5' opacity='0.3'/%3E%3Cline x1='5' y1='50' x2='95' y2='50' stroke='%2300f0ff' stroke-width='1.5' opacity='0.3'/%3E%3C/svg%3E">
+
   <!-- Custom Oceanic Deep Tech CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -64,27 +67,21 @@
 
       <!-- Quick Action Controls -->
       <div class="nav-actions-group">
-        <button id="btn-open-modal-nav" class="btn btn-glass btn-sm" disabled title="Inspect consolidated intelligence briefing">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-          final_spill_data.json
-        </button>
         <button id="btn-download-geojson" class="btn btn-glass btn-sm" disabled title="Download detection GeoJSON polygon">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          GeoJSON
+          Download GeoJSON
         </button>
-        <button id="btn-download-consolidated" class="btn btn-primary btn-sm" disabled title="Download complete consolidated package">
+        <button id="btn-download-consolidated" class="btn btn-primary btn-sm" disabled title="Download final_spill_data.json">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 8 12 12 14 14"></polyline>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-          Export Briefing
+          Download JSON
         </button>
       </div>
     </header>
@@ -350,9 +347,6 @@
               <button class="tab-btn" data-target="panel-sar">
                 <span class="tab-indicator"></span>Calibrated SAR (dB)
               </button>
-              <button class="tab-btn" data-target="panel-json">
-                <span class="tab-indicator"></span>final_spill_data.json
-              </button>
             </div>
           </div>
 
@@ -403,30 +397,6 @@
               </div>
             </div>
 
-            <!-- 6. Consolidated JSON Viewer -->
-            <div class="tab-panel json-panel" id="panel-json">
-              <div class="json-actions-strip">
-                <span class="json-tag">final_spill_data.json // Complete SIH26143 Payload</span>
-                <div class="json-btn-group">
-                  <button id="btn-copy-json" class="btn btn-hud-sm">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                    </svg>
-                    Copy JSON
-                  </button>
-                  <button id="btn-download-tab-json" class="btn btn-primary btn-sm">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                      <polyline points="7 10 12 15 17 10"></polyline>
-                      <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    Download JSON
-                  </button>
-                </div>
-              </div>
-              <pre id="json-code-block" class="json-code-viewer"><code>// Run detection to inspect generated final_spill_data.json</code></pre>
-            </div>
           </div>
         </section>
       </div>
@@ -537,36 +507,6 @@
     </footer>
   </div>
 
-  <!-- ================= MODAL: CONSOLIDATED INTELLIGENCE BRIEFING ================= -->
-  <div class="modal-backdrop" id="analytics-modal">
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <div class="modal-title-group">
-          <span class="modal-icon">📄</span>
-          <div>
-            <h3>Consolidated Maritime Intelligence Briefing</h3>
-            <span class="modal-sub">final_spill_data.json &bull; Smart India Hackathon 2026</span>
-          </div>
-        </div>
-        <button class="modal-close-btn" id="btn-close-modal" aria-label="Close modal">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        <div class="briefing-box" id="modal-briefing-box">
-          <div class="briefing-header">
-            <span class="briefing-tag">OFFICIAL MARITIME DIRECTIVE</span>
-          </div>
-          <p id="modal-enforcement-text">Loading...</p>
-        </div>
-        <pre class="json-view modal-json" id="modal-json-content"><code></code></pre>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-hud-sm" id="btn-modal-copy">Copy to Clipboard</button>
-        <button class="btn btn-primary" id="btn-modal-download">Download final_spill_data.json</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

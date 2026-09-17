@@ -52,7 +52,7 @@ class ConfidenceScorer:
         h, w = image_shape[:2]
 
         # 1. Contrast factor
-        if candidate.contrast_ratio is not None:
+        if candidate.contrast_ratio is not None and not np.isnan(candidate.contrast_ratio):
             # Positive contrast_ratio means spill is darker than surroundings
             s_contrast = float(np.clip(candidate.contrast_ratio * 3.0, 0.1, 1.0))
         else:
@@ -72,7 +72,9 @@ class ConfidenceScorer:
 
         # 3. Shape factor (compactness = 4*pi*area / perimeter^2)
         comp = candidate.compactness
-        if 0.05 <= comp <= 0.65:
+        if np.isnan(comp):
+            s_shape = 0.6
+        elif 0.05 <= comp <= 0.65:
             s_shape = 1.0
         elif comp > 0.65:
             # Very round/circular (rare for natural slicks at sea)
@@ -103,6 +105,9 @@ class ConfidenceScorer:
             + self.w_shape * s_shape
             + self.w_border * s_border
         )
+
+        if np.isnan(raw_score) or np.isinf(raw_score):
+            raw_score = 0.5
 
         final_score = float(np.clip(raw_score, 0.05, 0.98))
         return final_score

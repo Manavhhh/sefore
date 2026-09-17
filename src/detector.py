@@ -66,15 +66,34 @@ class ClassicalDetector(BaseDetector):
         """
         Detects suspected oil spills and returns a binary mask (0 = background, 1 = suspected spill).
         """
-        h, w = normalized_image.shape[:2]
+        # Normalize image dimensions and type for robust processing
+        img = np.squeeze(normalized_image)
+        if img.ndim == 3 and img.shape[2] in [3, 4]:
+            img = cv2.cvtColor(img[:, :, :3], cv2.COLOR_BGR2GRAY)
+        elif img.ndim != 2:
+            raise ValueError(f"Expected 2D image, got shape {img.shape}")
+
+        if np.issubdtype(img.dtype, np.floating):
+            if img.max() <= 1.0:
+                img = (img * 255.0).astype(np.uint8)
+            else:
+                img = np.clip(img, 0, 255).astype(np.uint8)
+        elif img.dtype != np.uint8:
+            img = np.clip(img, 0, 255).astype(np.uint8)
+
+        h, w = img.shape[:2]
         total_pixels = h * w
 
         if valid_mask is None:
             valid_mask = np.ones((h, w), dtype=bool)
+        else:
+            valid_mask = np.squeeze(valid_mask).astype(bool)
+            if valid_mask.shape != (h, w):
+                valid_mask = np.ones((h, w), dtype=bool)
 
         # 1. Local Adaptive Thresholding (Detecting local backscatter depression)
         # Slicks are significantly darker than the surrounding sea surface
-        blurred = cv2.GaussianBlur(normalized_image, (5, 5), 0)
+        blurred = cv2.GaussianBlur(img, (5, 5), 0)
         local_mean = cv2.boxFilter(
             blurred,
             ddepth=-1,
@@ -107,8 +126,8 @@ class ClassicalDetector(BaseDetector):
             closed, connectivity=8
         )
 
-        final_mask = np.zeros((h, w), dtype=np.uint8)
         max_allowed_pixels = int(total_pixels * self.max_area_fraction)
+        keep_labels = []
 
         for i in range(1, num_labels):
             area = stats[i, cv2.CC_STAT_AREA]
@@ -136,7 +155,11 @@ class ClassicalDetector(BaseDetector):
                 if area < self.min_area_pixels * 3:
                     continue
 
-            # Add valid candidate to final mask
-            final_mask[labels == i] = 1
+            keep_labels.append(i)
+
+        if keep_labels:
+            final_mask = np.isin(labels, keep_labels).astype(np.uint8)
+        else:
+            final_mask = np.zeros((h, w), dtype=np.uint8)
 
         return final_mask

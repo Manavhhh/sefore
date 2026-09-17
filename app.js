@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Tab switching
+  // Tab switching with Leaflet map auto-resize invalidation
   tabBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       tabBtns.forEach((b) => b.classList.remove("active"));
@@ -146,6 +146,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetPanel = document.getElementById(targetId);
       if (targetPanel) {
         targetPanel.classList.add("active");
+      }
+      if (targetId === "panel-map") {
+        setTimeout(() => {
+          map.invalidateSize({ animate: true });
+        }, 50);
       }
     });
   });
@@ -174,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await navigator.clipboard.writeText(jsonStr);
       const originalText = buttonEl.textContent;
       buttonEl.textContent = "Copied!";
-      buttonEl.style.color = "#10b981";
+      buttonEl.style.color = "#00e699";
       setTimeout(() => {
         buttonEl.textContent = originalText;
         buttonEl.style.color = "";
@@ -206,20 +211,51 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnDownloadTabJson) btnDownloadTabJson.addEventListener("click", downloadConsolidatedJSON);
   if (btnModalDownload) btnModalDownload.addEventListener("click", downloadConsolidatedJSON);
 
-  // Download Spill GeoJSON
+  // Download Spill GeoJSON safely as Blob
   if (btnDownloadGeoJSON) {
-    btnDownloadGeoJSON.addEventListener("click", () => {
+    btnDownloadGeoJSON.addEventListener("click", async () => {
       const selected = sampleSelect.value || "00000.tif";
       const sampleId = selected.replace(".tif", "").replace(".tiff", "");
-      window.location.href = `samples/${sampleId}/spill.geojson`;
+      try {
+        const resp = await fetch(`samples/${sampleId}/spill.geojson`);
+        if (resp.ok) {
+          const blob = await resp.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `oil_spill_${sampleId}.geojson`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          return;
+        }
+      } catch (e) {
+        console.warn("Direct GeoJSON fetch failed, using memory state:", e);
+      }
+      if (currentResults && currentResults.features && currentResults.features.length > 0) {
+        const geojson = {
+          type: "FeatureCollection",
+          features: currentResults.features,
+        };
+        const blob = new Blob([JSON.stringify(geojson, null, 2)], { type: "application/geo+json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `oil_spill_${sampleId}.geojson`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
     });
   }
 
-  // Fit bounds actions
+  // Smooth cinematic fit bounds actions
   if (btnFitSpill) {
     btnFitSpill.addEventListener("click", () => {
       if (currentSpillLayer && currentSpillLayer.getBounds && currentSpillLayer.getBounds().isValid()) {
-        map.fitBounds(currentSpillLayer.getBounds(), { padding: [50, 50], maxZoom: 13 });
+        map.fitBounds(currentSpillLayer.getBounds(), { padding: [50, 50], maxZoom: 13, animate: true, duration: 0.8 });
       }
     });
   }
@@ -237,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
       if (allBounds.isValid()) {
-        map.fitBounds(allBounds, { padding: [40, 40] });
+        map.fitBounds(allBounds, { padding: [40, 40], animate: true, duration: 0.8 });
       }
     });
   }
@@ -328,50 +364,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Renders complete scene from final_spill_data.json (ultra-fast, client-side)
   function renderSceneFromConsolidatedData(sceneName, sampleId, data) {
-    console.log("Rendering scene from final_spill_data.json:", sceneName, data);
-    currentConsolidatedJSON = data;
+    try {
+      console.log("Rendering scene from final_spill_data.json:", sceneName, data);
+      currentConsolidatedJSON = data;
 
-    const sSum = data.spill_detection_summary || {};
-    const vAn = data.vessel_identification_analytics || {};
-    const prime = vAn.prime_suspect_vessel;
-    const rankedVessels = vAn.ranked_suspect_leaderboard || [];
+      const sSum = data.spill_detection_summary || {};
+      const vAn = data.vessel_identification_analytics || {};
+      const prime = vAn.prime_suspect_vessel;
+      const rankedVessels = vAn.ranked_suspect_leaderboard || [];
 
-    // Find static manifest entry if present for Ground Truth metrics
-    const manifestItem = (staticManifest || []).find((m) => m.id === sampleId || m.name === sceneName);
+      // Find static manifest entry if present for Ground Truth metrics
+      const manifestItem = (staticManifest || []).find((m) => m.id === sampleId || m.name === sceneName);
 
-    // Synthesize results object
-    const results = {
-      name: sceneName,
-      detected_regions_count: sSum.detected_regions_count || 0,
-      highest_confidence: sSum.highest_heuristic_confidence || 0,
-      total_estimated_area_km2: sSum.total_estimated_area_km2 || 0,
-      total_estimated_area_m2: sSum.total_estimated_area_m2 || 0,
-      features: data.spill_features || [],
-      vessel_analytics: {
-        total_vessels_tracked: vAn.total_vessels_tracked || rankedVessels.length,
-        primary_suspect: prime,
-        ranked_suspects: rankedVessels,
-        vessel_geojson: vAn.vessel_trajectories_geojson,
-        cpa_vectors_geojson: vAn.cpa_vectors_geojson,
-      },
-      overlay_url: `samples/${sampleId}/overlay.png`,
-      mask_url: `samples/${sampleId}/mask.png`,
-      sar_url: `samples/${sampleId}/preprocessed.png`,
-      ground_truth_url: `samples/${sampleId}/ground_truth.png`,
-      comparison_url: `samples/${sampleId}/gt_vs_pred_comparison.png`,
-      ground_truth_metrics: manifestItem ? (manifestItem.metrics || manifestItem.ground_truth_metrics) : null,
-      pixels: manifestItem ? manifestItem.pixels : null,
-      consolidated_analytics: data,
-    };
+      // Synthesize results object
+      const results = {
+        name: sceneName,
+        detected_regions_count: sSum.detected_regions_count || 0,
+        highest_confidence: sSum.highest_heuristic_confidence || 0,
+        total_estimated_area_km2: sSum.total_estimated_area_km2 || 0,
+        total_estimated_area_m2: sSum.total_estimated_area_m2 || 0,
+        features: data.spill_features || [],
+        vessel_analytics: {
+          total_vessels_tracked: vAn.total_vessels_tracked || rankedVessels.length,
+          primary_suspect: prime,
+          ranked_suspects: rankedVessels,
+          vessel_geojson: vAn.vessel_trajectories_geojson,
+          cpa_vectors_geojson: vAn.cpa_vectors_geojson,
+        },
+        overlay_url: `samples/${sampleId}/overlay.png`,
+        mask_url: `samples/${sampleId}/mask.png`,
+        sar_url: `samples/${sampleId}/preprocessed.png`,
+        ground_truth_url: `samples/${sampleId}/ground_truth.png`,
+        comparison_url: `samples/${sampleId}/gt_vs_pred_comparison.png`,
+        ground_truth_metrics: manifestItem ? (manifestItem.metrics || manifestItem.ground_truth_metrics) : null,
+        pixels: manifestItem ? manifestItem.pixels : null,
+        consolidated_analytics: data,
+      };
 
-    renderDetectionResults(results, true);
+      renderDetectionResults(results, true);
+    } catch (renderErr) {
+      console.error("Error rendering scene data:", renderErr);
+    } finally {
+      btnRunSample.disabled = false;
+      btnRunSample.textContent = "Analyze";
 
-    btnRunSample.disabled = false;
-    btnRunSample.textContent = "Analyze";
-
-    const statusPill = document.getElementById("system-status");
-    if (statusPill) {
-      statusPill.innerHTML = '<span class="status-dot"></span> Active &bull; ' + sceneName;
+      const statusPill = document.getElementById("system-status");
+      if (statusPill) {
+        statusPill.innerHTML = '<span class="status-dot green"></span> Active &bull; ' + sceneName;
+      }
     }
   }
 
@@ -398,21 +438,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     btnDownloadGeoJSON.disabled = !results.features || results.features.length === 0;
 
-    // 2. Update Imagery Views
+    // 2. Update Imagery Views with smooth fade transitions
     const sampleId = (results.name || "").replace(".tif", "").replace(".tiff", "");
+    const setSmoothImage = (imgEl, src) => {
+      if (!imgEl || !src) return;
+      imgEl.style.transition = "opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+      imgEl.style.opacity = "0.2";
+      imgEl.onload = () => { imgEl.style.opacity = "1.0"; };
+      imgEl.onerror = () => { imgEl.style.opacity = "0.7"; };
+      imgEl.src = src;
+    };
+
     if (isStatic) {
-      imgOverlay.src = results.overlay_url || `samples/${sampleId}/overlay.png`;
-      imgMask.src = results.mask_url || `samples/${sampleId}/mask.png`;
-      imgSar.src = results.sar_url || `samples/${sampleId}/preprocessed.png`;
-      if (imgGt) imgGt.src = results.ground_truth_url || `samples/${sampleId}/ground_truth.png`;
-      if (imgComp) imgComp.src = results.comparison_url || `samples/${sampleId}/gt_vs_pred_comparison.png`;
+      setSmoothImage(imgOverlay, results.overlay_url || `samples/${sampleId}/overlay.png`);
+      setSmoothImage(imgMask, results.mask_url || `samples/${sampleId}/mask.png`);
+      setSmoothImage(imgSar, results.sar_url || `samples/${sampleId}/preprocessed.png`);
+      if (imgGt) setSmoothImage(imgGt, results.ground_truth_url || `samples/${sampleId}/ground_truth.png`);
+      if (imgComp) setSmoothImage(imgComp, results.comparison_url || `samples/${sampleId}/gt_vs_pred_comparison.png`);
     } else {
       const ts = new Date().getTime();
-      imgOverlay.src = `/output/overlay.png?t=${ts}`;
-      imgMask.src = `/output/mask.png?t=${ts}`;
-      imgSar.src = `/output/preprocessed.png?t=${ts}`;
-      if (imgGt) imgGt.src = (results.ground_truth_path ? `/${results.ground_truth_path}` : `/output/eval_results/${sampleId}/ground_truth.png`) + `?t=${ts}`;
-      if (imgComp) imgComp.src = (results.comparison_path ? `/${results.comparison_path}` : `/output/eval_results/${sampleId}/gt_vs_pred_comparison.png`) + `?t=${ts}`;
+      setSmoothImage(imgOverlay, `/output/overlay.png?t=${ts}`);
+      setSmoothImage(imgMask, `/output/mask.png?t=${ts}`);
+      setSmoothImage(imgSar, `/output/preprocessed.png?t=${ts}`);
+      if (imgGt) setSmoothImage(imgGt, (results.ground_truth_path ? `/${results.ground_truth_path}` : `/output/eval_results/${sampleId}/ground_truth.png`) + `?t=${ts}`);
+      if (imgComp) setSmoothImage(imgComp, (results.comparison_path ? `/${results.comparison_path}` : `/output/eval_results/${sampleId}/gt_vs_pred_comparison.png`) + `?t=${ts}`);
     }
 
     // 2B. Ground Truth Validation Metrics
@@ -458,17 +507,9 @@ document.addEventListener("DOMContentLoaded", () => {
       currentConsolidatedJSON = results.consolidated_analytics;
     }
 
-    // Enable JSON Actions
-    btnDownloadConsolidated.disabled = false;
-    btnOpenModalNav.disabled = false;
-
-    // Update JSON Tab and Modal
-    if (currentConsolidatedJSON) {
-      const prettyJSON = JSON.stringify(currentConsolidatedJSON, null, 2);
-      jsonCodeBlock.innerHTML = `<code>${escapeHtml(prettyJSON)}</code>`;
-      modalJsonContent.innerHTML = `<code>${escapeHtml(prettyJSON)}</code>`;
-      modalEnforcementText.textContent = currentConsolidatedJSON.vessel_identification_analytics?.enforcement_recommendation || "Attribution directive available.";
-    }
+    // Enable Download Actions
+    if (btnDownloadConsolidated) btnDownloadConsolidated.disabled = false;
+    if (btnDownloadGeoJSON) btnDownloadGeoJSON.disabled = false;
 
     // 4. Populate Vessel Attribution HUD
     vesselCountBadge.textContent = `${rankedVessels.length} Tracked`;
@@ -544,22 +585,22 @@ document.addEventListener("DOMContentLoaded", () => {
       };
       currentSpillLayer = L.geoJSON(spillGeo, {
         style: {
-          color: "#f59e0b",
+          color: "#ffb020",
           weight: 2.5,
           opacity: 0.95,
-          fillColor: "#ef4444",
+          fillColor: "#ff3b5c",
           fillOpacity: 0.6,
         },
         onEachFeature: (feature, layer) => {
           const p = feature.properties;
           layer.bindPopup(`
-            <div style="font-family: 'Outfit', sans-serif; font-size: 13px; color: #1e293b;">
-              <h4 style="margin: 0 0 6px; color: #b91c1c;">Detected Oil Spill #${p.candidate_id}</h4>
-              <table style="width: 100%; border-collapse: collapse; line-height: 1.5;">
-                <tr><td><strong>Heuristic Conf:</strong></td><td style="color: #d97706;">${(p.heuristic_confidence_score * 100).toFixed(1)}%</td></tr>
-                <tr><td><strong>Estimated Area:</strong></td><td>${p.estimated_area_km2} km² (${p.estimated_area_m2?.toLocaleString()} m²)</td></tr>
-                <tr><td><strong>Centroid:</strong></td><td>${p.centroid_lat}°N, ${p.centroid_lon}°E</td></tr>
-                <tr><td><strong>UTM Zone:</strong></td><td>${p.utm_projection}</td></tr>
+            <div style="font-family: 'Space Grotesk', -apple-system, sans-serif; font-size: 13px; color: #e8eefc;">
+              <h4 style="margin: 0 0 6px; color: #ff3b5c; font-family: 'Space Grotesk', sans-serif;">Detected Oil Spill #${p.candidate_id}</h4>
+              <table style="width: 100%; border-collapse: collapse; line-height: 1.6; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">
+                <tr><td style="color: #94a3b8;">Confidence:</td><td style="color: #ffb020; font-weight:700;">${(p.heuristic_confidence_score * 100).toFixed(1)}%</td></tr>
+                <tr><td style="color: #94a3b8;">Area:</td><td style="color: #00f0ff;">${p.estimated_area_km2} km²</td></tr>
+                <tr><td style="color: #94a3b8;">Centroid:</td><td>${p.centroid_lat}°N, ${p.centroid_lon}°E</td></tr>
+                <tr><td style="color: #94a3b8;">UTM Zone:</td><td>${p.utm_projection}</td></tr>
               </table>
             </div>
           `);
@@ -567,9 +608,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       spillLayerGroup.addLayer(currentSpillLayer);
 
-      // Instantly center and zoom map on the detected oil spill!
+      // Smooth cinematic zoom and center on detected spill
       if (currentSpillLayer.getBounds().isValid()) {
-        map.fitBounds(currentSpillLayer.getBounds(), { padding: [40, 40], maxZoom: 13 });
+        map.fitBounds(currentSpillLayer.getBounds(), { padding: [50, 50], maxZoom: 13, animate: true, duration: 0.8 });
       }
     }
 
@@ -581,21 +622,21 @@ document.addEventListener("DOMContentLoaded", () => {
           const isPrime = prime && p.mmsi === prime.mmsi;
           if (isPrime) {
             return {
-              color: "#ef4444",
+              color: "#ff3b5c",
               weight: 4,
               opacity: 1.0,
               dashArray: "6, 6",
             };
           } else if (p.suspect_score >= 50) {
             return {
-              color: "#f59e0b",
+              color: "#ffb020",
               weight: 3,
               opacity: 0.9,
               dashArray: "4, 6",
             };
           } else {
             return {
-              color: "#00d4ff",
+              color: "#00f0ff",
               weight: 2,
               opacity: 0.75,
               dashArray: "3, 5",
@@ -606,18 +647,18 @@ document.addEventListener("DOMContentLoaded", () => {
           const p = feature.properties;
           const isPrime = prime && p.mmsi === prime.mmsi;
           layer.bindPopup(`
-            <div style="font-family: 'Outfit', sans-serif; font-size: 13px; color: #1e293b;">
-              <h4 style="margin: 0 0 6px; color: ${isPrime ? "#b91c1c" : "#0284c7"};">
+            <div style="font-family: 'Space Grotesk', -apple-system, sans-serif; font-size: 13px; color: #e8eefc;">
+              <h4 style="margin: 0 0 6px; color: ${isPrime ? "#ff3b5c" : "#00f0ff"}; font-family: 'Space Grotesk', sans-serif;">
                 ${isPrime ? "🚨 " : ""}${p.name}
               </h4>
-              <table style="width: 100%; border-collapse: collapse; line-height: 1.5;">
-                <tr><td><strong>MMSI:</strong></td><td>${p.mmsi}</td></tr>
-                <tr><td><strong>Type:</strong></td><td>${p.vessel_type}</td></tr>
-                <tr><td><strong>Flag:</strong></td><td>${p.flag}</td></tr>
-                <tr><td><strong>Speed / Course:</strong></td><td>${p.speed_knots} kts @ ${p.heading_deg}°</td></tr>
-                <tr><td><strong>Distance to Spill:</strong></td><td style="color: #b91c1c; font-weight:700;">${p.distance_to_centroid_km} km</td></tr>
-                <tr><td><strong>Suspect Score:</strong></td><td style="color: #d97706; font-weight:700;">${p.suspect_score.toFixed(1)}% (${p.risk_tier})</td></tr>
-                <tr><td><strong>CPA Time:</strong></td><td>${p.cpa_timestamp || "N/A"}</td></tr>
+              <table style="width: 100%; border-collapse: collapse; line-height: 1.6; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;">
+                <tr><td style="color: #94a3b8;">MMSI:</td><td>${p.mmsi}</td></tr>
+                <tr><td style="color: #94a3b8;">Type:</td><td>${p.vessel_type}</td></tr>
+                <tr><td style="color: #94a3b8;">Flag:</td><td>${p.flag}</td></tr>
+                <tr><td style="color: #94a3b8;">Speed / Course:</td><td>${p.speed_knots} kts @ ${p.heading_deg}°</td></tr>
+                <tr><td style="color: #94a3b8;">Distance to Spill:</td><td style="color: #ff3b5c; font-weight:700;">${p.distance_to_centroid_km} km</td></tr>
+                <tr><td style="color: #94a3b8;">Suspect Score:</td><td style="color: #ffb020; font-weight:700;">${p.suspect_score.toFixed(1)}% (${p.risk_tier})</td></tr>
+                <tr><td style="color: #94a3b8;">CPA Time:</td><td>${p.cpa_timestamp || "N/A"}</td></tr>
               </table>
             </div>
           `);
@@ -774,6 +815,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((manifest) => {
       if (Array.isArray(manifest) && manifest.length > 0) {
         staticManifest = manifest;
+        const currentSelectedVal = sampleSelect.value || currentResults?.name || "00000.tif";
         sampleSelect.innerHTML = "";
         manifest.forEach((item) => {
           const opt = document.createElement("option");
@@ -782,7 +824,7 @@ document.addEventListener("DOMContentLoaded", () => {
           opt.textContent = `${item.name} (${item.detected_regions_count} slicks, ${item.total_estimated_area_km2} km²${iouStr})`;
           sampleSelect.appendChild(opt);
         });
-        sampleSelect.value = currentResults?.name || manifest[0].name;
+        sampleSelect.value = currentSelectedVal;
       }
     })
     .catch((err) => console.log("Background manifest sync:", err));
