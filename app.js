@@ -155,21 +155,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Modal open/close
+  // Modal open/close (guarded)
   function openAnalyticsModal() {
-    if (!currentConsolidatedJSON) return;
+    if (!currentConsolidatedJSON || !analyticsModal) return;
     analyticsModal.classList.add("open");
   }
 
   function closeAnalyticsModal() {
-    analyticsModal.classList.remove("open");
+    if (analyticsModal) analyticsModal.classList.remove("open");
   }
 
   if (btnOpenModalNav) btnOpenModalNav.addEventListener("click", openAnalyticsModal);
   if (btnCloseModal) btnCloseModal.addEventListener("click", closeAnalyticsModal);
-  analyticsModal.addEventListener("click", (e) => {
-    if (e.target === analyticsModal) closeAnalyticsModal();
-  });
+  if (analyticsModal) {
+    analyticsModal.addEventListener("click", (e) => {
+      if (e.target === analyticsModal) closeAnalyticsModal();
+    });
+  }
 
   // Copy JSON utility
   async function copyJSONToClipboard(buttonEl) {
